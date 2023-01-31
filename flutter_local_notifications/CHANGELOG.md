@@ -1,3 +1,7 @@
+# [5.0.0+10]
+
+* Collapsed and expanded custom notification layout.
+
 # [5.0.0+9]
 
 * Small fix and additional log for error when receiving notification.
