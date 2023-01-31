@@ -49,7 +49,7 @@ class AndroidNotificationDetails {
     this.fullScreenIntent = false,
     this.shortcutId,
     this.additionalFlags,
-    this.customLayoutName,
+    this.customLayoutLegacyName,
     this.subText,
     this.tag,
     this.customLayoutCollapsedName,
@@ -265,7 +265,7 @@ class AndroidNotificationDetails {
   /// The widget id containing the text must be named `push_text`.
   /// The widget id containing the image must be named `push_image`.
   /// Use with versions SDK prior to S (31).
-  final String? customLayoutName;
+  final String? customLayoutLegacyName;
 
   /// Provides some additional information that is displayed in the
   /// notification.

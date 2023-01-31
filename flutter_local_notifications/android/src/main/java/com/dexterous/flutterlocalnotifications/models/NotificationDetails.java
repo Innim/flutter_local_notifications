@@ -119,7 +119,7 @@ public class NotificationDetails {
     private static final String SHORTCUT_ID = "shortcutId";
     private static final String SUB_TEXT = "subText";
 
-    private static final String CUSTOM_LAYOUT_NAME = "customLayoutName";
+    private static final String CUSTOM_LAYOUT_LEGACY_NAME = "customLayoutLegacyName";
     private static final String CUSTOM_LAYOUT_COLLAPSED_NAME = "customLayoutCollapsedName";
     private static final String CUSTOM_LAYOUT_EXPANDED_NAME = "customLayoutExpandedName";
 
@@ -179,7 +179,7 @@ public class NotificationDetails {
     public Long when;
     public Boolean fullScreenIntent;
     public String shortcutId;
-    public String customLayoutName;
+    public String customLayoutLegacyName;
     public String subText;
     public String tag;
     public String customLayoutCollapsedName;
@@ -256,7 +256,7 @@ public class NotificationDetails {
             notificationDetails.fullScreenIntent = (Boolean) platformChannelSpecifics.get((FULL_SCREEN_INTENT));
             notificationDetails.shortcutId = (String) platformChannelSpecifics.get(SHORTCUT_ID);
             notificationDetails.additionalFlags = (int[]) platformChannelSpecifics.get(ADDITIONAL_FLAGS);
-            notificationDetails.customLayoutName = (String) platformChannelSpecifics.get(CUSTOM_LAYOUT_NAME);
+            notificationDetails.customLayoutLegacyName = (String) platformChannelSpecifics.get(CUSTOM_LAYOUT_LEGACY_NAME);
             notificationDetails.subText = (String) platformChannelSpecifics.get(SUB_TEXT);
             notificationDetails.tag = (String) platformChannelSpecifics.get(TAG);
             notificationDetails.customLayoutCollapsedName =  (String) platformChannelSpecifics.get(CUSTOM_LAYOUT_COLLAPSED_NAME);

@@ -223,7 +223,7 @@ public class FlutterLocalNotificationsPlugin implements MethodCallHandler, Plugi
                     resources = manager.getResourcesForApplication(packageName);
 
                     if (VERSION.SDK_INT < VERSION_CODES.S) {
-                        RemoteViews contentView = setCustomContentView(context, resources, notificationDetails, notificationDetails.customLayoutName, packageName);
+                        RemoteViews contentView = setCustomContentView(context, resources, notificationDetails, notificationDetails.customLayoutLegacyName, packageName);
                         builder.setCustomContentView(contentView);
                     } else {
                         String customLayoutCollapsedName = notificationDetails.customLayoutCollapsedName;
@@ -269,7 +269,7 @@ public class FlutterLocalNotificationsPlugin implements MethodCallHandler, Plugi
 
     private static boolean checkIfUseCustomLayouts(NotificationDetails notificationDetails) {
         if (VERSION.SDK_INT < VERSION_CODES.S) {
-            return !StringUtils.isNullOrEmpty(notificationDetails.customLayoutName);
+            return !StringUtils.isNullOrEmpty(notificationDetails.customLayoutLegacyName);
         } else {
             return !StringUtils.isNullOrEmpty(notificationDetails.customLayoutCollapsedName) ||
                     !StringUtils.isNullOrEmpty(notificationDetails.customLayoutExpandedName);
