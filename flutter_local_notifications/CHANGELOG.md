@@ -1,6 +1,8 @@
 # [5.0.0+10]
 
-* Collapsed and expanded custom notification layout.
+* Collapsed and expanded custom notification layout for SDK 31+ by specifying `customLayoutCollapsedName` and `customLayoutExpandedName`. 
+* The `customLayoutLegacyName` allows to set custom notification layout for versions up to 31.
+* The `customLayoutName` is deprecated.
 
 # [5.0.0+9]
 

@@ -49,9 +49,10 @@ class AndroidNotificationDetails {
     this.fullScreenIntent = false,
     this.shortcutId,
     this.additionalFlags,
-    this.customLayoutLegacyName,
+    this.customLayoutName,
     this.subText,
     this.tag,
+    this.customLayoutLegacyName,
     this.customLayoutCollapsedName,
     this.customLayoutExpandedName,
   });
@@ -264,8 +265,11 @@ class AndroidNotificationDetails {
   /// The widget id containing the title must be named `push_title`.
   /// The widget id containing the text must be named `push_text`.
   /// The widget id containing the image must be named `push_image`.
-  /// Use with versions SDK prior to S (31).
-  final String? customLayoutLegacyName;
+  @Deprecated(
+      'Use AndroidNotificationDetails.customLayoutLegacyName instead. '
+      'This feature was deprecated in v5.0.0+10'
+  )
+  final String? customLayoutName;
 
   /// Provides some additional information that is displayed in the
   /// notification.
@@ -288,6 +292,16 @@ class AndroidNotificationDetails {
   /// Showing notification with the same (tag, id) pair as a currently visible
   /// notification will replace the old notification with the new one.
   final String? tag;
+
+  /// Specifies the custom notification layout.
+  ///
+  /// Use when to need a custom notification layout.
+  /// The layout located in the `android/app/main/res/layout` directory of the android application.
+  /// The widget id containing the title must be named `push_title`.
+  /// The widget id containing the text must be named `push_text`.
+  /// The widget id containing the image must be named `push_image`.
+  /// Use with versions SDK prior to S (31).
+  final String? customLayoutLegacyName;
 
   /// Specifies the custom notification layout for collapsed view.
   ///

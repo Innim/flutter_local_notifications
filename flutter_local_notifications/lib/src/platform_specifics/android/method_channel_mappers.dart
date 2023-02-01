@@ -249,7 +249,7 @@ extension AndroidNotificationDetailsMapper on AndroidNotificationDetails {
         'fullScreenIntent': fullScreenIntent,
         'shortcutId': shortcutId,
         'additionalFlags': additionalFlags,
-        'customLayoutLegacyName': customLayoutLegacyName,
+        'customLayoutLegacyName': customLayoutLegacyName ?? customLayoutName,
         'customLayoutCollapsedName': customLayoutCollapsedName,
         'customLayoutExpandedName': customLayoutExpandedName,
         'subText': subText,
