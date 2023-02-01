@@ -26,4 +26,4 @@ jobs:
           refreshToken: ${{ secrets.OAUTH_REFRESH_TOKEN }}
           skipTests: true
           flutter: true
-          flutterVersion: '3.0.5'
+          flutterVersion: '3.0.5' # not working!
