@@ -1,3 +1,7 @@
+# [14.0.0+1-dev.1]
+
+* [Android] added support for actions in custom notification layouts by specifying `customViewId` in `AndroidNotificationAction`.
+
 # [14.0.0-dev.1]
 
 * [Android] added support for scheduling inexact notifications. The corresponding APIs for scheduling notifications now have a new `AndroidScheduleMode` to allow for configuring this if required. The `androidAllowWhileIdle` argument is now deprecated and will be removed in the future. Thanks to the PR from [Joachim Böhmer](https://github.com/kaptnkoala)

@@ -311,6 +311,7 @@ extension AndroidNotificationDetailsMapper on AndroidNotificationDetails {
                       _convertInputToMap(input))
                   .toList(),
               'cancelNotification': e.cancelNotification,
+              'customViewId': e.customViewId,
             },
           )
           .toList(),
