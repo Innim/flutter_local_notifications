@@ -4,12 +4,11 @@ import android.graphics.Color;
 
 import androidx.annotation.Keep;
 
-import com.dexterous.flutterlocalnotifications.SoundSource;
-
+import java.io.Serializable;
 import java.util.Map;
 
 @Keep
-public class NotificationChannelDetails {
+public class NotificationChannelDetails implements Serializable {
     private static final String ID = "id";
     private static final String NAME = "name";
     private static final String DESCRIPTION = "description";
@@ -27,6 +26,7 @@ public class NotificationChannelDetails {
     private static final String LED_COLOR_RED = "ledColorRed";
     private static final String LED_COLOR_GREEN = "ledColorGreen";
     private static final String LED_COLOR_BLUE = "ledColorBlue";
+    private static final String AUDIO_ATTRIBUTES_USAGE = "audioAttributesUsage";
 
     public String id;
     public String name;
@@ -42,7 +42,7 @@ public class NotificationChannelDetails {
     public NotificationChannelAction channelAction;
     public Boolean enableLights;
     public Integer ledColor;
-
+    public Integer audioAttributesUsage;
 
     public static NotificationChannelDetails from(Map<String, Object> arguments) {
         NotificationChannelDetails notificationChannel = new NotificationChannelDetails();
@@ -52,12 +52,14 @@ public class NotificationChannelDetails {
         notificationChannel.groupId = (String) arguments.get(GROUP_ID);
         notificationChannel.importance = (Integer) arguments.get(IMPORTANCE);
         notificationChannel.showBadge = (Boolean) arguments.get(SHOW_BADGE);
-        notificationChannel.channelAction = NotificationChannelAction.values()[(Integer) arguments.get(CHANNEL_ACTION)];
+        notificationChannel.channelAction =
+                NotificationChannelAction.values()[(Integer) arguments.get(CHANNEL_ACTION)];
         notificationChannel.enableVibration = (Boolean) arguments.get(ENABLE_VIBRATION);
         notificationChannel.vibrationPattern = (long[]) arguments.get(VIBRATION_PATTERN);
 
         notificationChannel.playSound = (Boolean) arguments.get(PLAY_SOUND);
         notificationChannel.sound = (String) arguments.get(SOUND);
+        notificationChannel.audioAttributesUsage = (Integer) arguments.get(AUDIO_ATTRIBUTES_USAGE);
         Integer soundSourceIndex = (Integer) arguments.get(SOUND_SOURCE);
         if (soundSourceIndex != null) {
             notificationChannel.soundSource = SoundSource.values()[soundSourceIndex];
@@ -75,7 +77,8 @@ public class NotificationChannelDetails {
         return notificationChannel;
     }
 
-    public static NotificationChannelDetails fromNotificationDetails(NotificationDetails notificationDetails) {
+    public static NotificationChannelDetails fromNotificationDetails(
+            NotificationDetails notificationDetails) {
         NotificationChannelDetails notificationChannel = new NotificationChannelDetails();
         notificationChannel.id = notificationDetails.channelId;
         notificationChannel.name = notificationDetails.channelName;
@@ -92,6 +95,7 @@ public class NotificationChannelDetails {
         notificationChannel.playSound = notificationDetails.playSound;
         notificationChannel.sound = notificationDetails.sound;
         notificationChannel.soundSource = notificationDetails.soundSource;
+        notificationChannel.audioAttributesUsage = notificationDetails.audioAttributesUsage;
         notificationChannel.ledColor = notificationDetails.ledColor;
         notificationChannel.enableLights = notificationDetails.enableLights;
         return notificationChannel;

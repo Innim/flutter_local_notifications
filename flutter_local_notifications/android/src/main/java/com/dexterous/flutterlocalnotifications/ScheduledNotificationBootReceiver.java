@@ -7,10 +7,9 @@ import android.content.Intent;
 import androidx.annotation.Keep;
 
 @Keep
-
-public class ScheduledNotificationBootReceiver extends BroadcastReceiver
-{
+public class ScheduledNotificationBootReceiver extends BroadcastReceiver {
     @Override
+    @SuppressWarnings("deprecation")
     public void onReceive(final Context context, Intent intent) {
         String action = intent.getAction();
         if (action != null) {

@@ -5,23 +5,24 @@ import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 
 import androidx.annotation.Keep;
+import androidx.annotation.Nullable;
 
-import com.dexterous.flutterlocalnotifications.BitmapSource;
-import com.dexterous.flutterlocalnotifications.NotificationStyle;
-import com.dexterous.flutterlocalnotifications.RepeatInterval;
-import com.dexterous.flutterlocalnotifications.SoundSource;
 import com.dexterous.flutterlocalnotifications.models.styles.BigPictureStyleInformation;
 import com.dexterous.flutterlocalnotifications.models.styles.BigTextStyleInformation;
 import com.dexterous.flutterlocalnotifications.models.styles.DefaultStyleInformation;
 import com.dexterous.flutterlocalnotifications.models.styles.InboxStyleInformation;
 import com.dexterous.flutterlocalnotifications.models.styles.MessagingStyleInformation;
 import com.dexterous.flutterlocalnotifications.models.styles.StyleInformation;
+import com.dexterous.flutterlocalnotifications.utils.LongUtils;
+import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Keep
-public class NotificationDetails {
+public class NotificationDetails implements Serializable {
     private static final String ID = "id";
     private static final String TITLE = "title";
     private static final String BODY = "body";
@@ -102,12 +103,13 @@ public class NotificationDetails {
     private static final String VISIBILITY = "visibility";
 
     private static final String TICKER = "ticker";
-    private static final String ALLOW_WHILE_IDLE = "allowWhileIdle";
+    private static final String SCHEDULE_MODE = "scheduleMode";
     private static final String CATEGORY = "category";
     private static final String TIMEOUT_AFTER = "timeoutAfter";
     private static final String SHOW_WHEN = "showWhen";
     private static final String WHEN = "when";
     private static final String USES_CHRONOMETER = "usesChronometer";
+    private static final String CHRONOMETER_COUNT_DOWN = "chronometerCountDown";
     private static final String ADDITIONAL_FLAGS = "additionalFlags";
 
     private static final String SCHEDULED_DATE_TIME = "scheduledDateTime";
@@ -118,6 +120,10 @@ public class NotificationDetails {
     private static final String FULL_SCREEN_INTENT = "fullScreenIntent";
     private static final String SHORTCUT_ID = "shortcutId";
     private static final String SUB_TEXT = "subText";
+    private static final String ACTIONS = "actions";
+    private static final String COLORIZED = "colorized";
+    private static final String NUMBER = "number";
+    private static final String AUDIO_ATTRIBUTES_USAGE = "audioAttributesUsage";
 
     private static final String CUSTOM_LAYOUT_LEGACY_NAME = "customLayoutLegacyName";
     private static final String CUSTOM_LAYOUT_COLLAPSED_NAME = "customLayoutCollapsedName";
@@ -152,7 +158,7 @@ public class NotificationDetails {
     public Boolean ongoing;
     public Integer day;
     public Integer color;
-    public String largeIcon;
+    public Object largeIcon;
     public BitmapSource largeIconBitmapSource;
     public Boolean onlyAlertOnce;
     public Boolean showProgress;
@@ -166,12 +172,16 @@ public class NotificationDetails {
     public Integer ledOffMs;
     public String ticker;
     public Integer visibility;
-    public Boolean allowWhileIdle;
+
+    @SerializedName(value = "scheduleMode", alternate = "allowWhileIdle")
+    public ScheduleMode scheduleMode;
+
     public Long timeoutAfter;
     public String category;
     public int[] additionalFlags;
     public Boolean showWhen;
     public Boolean usesChronometer;
+    public Boolean chronometerCountDown;
     public String scheduledDateTime;
     public String timeZoneName;
     public ScheduledNotificationRepeatFrequency scheduledNotificationRepeatFrequency;
@@ -179,14 +189,18 @@ public class NotificationDetails {
     public Long when;
     public Boolean fullScreenIntent;
     public String shortcutId;
-    public String customLayoutLegacyName;
     public String subText;
+    public @Nullable List<NotificationAction> actions;
     public String tag;
+    public Boolean colorized;
+    public Integer number;
+    public Integer audioAttributesUsage;
+    public String customLayoutLegacyName;
     public String customLayoutCollapsedName;
     public String customLayoutExpandedName;
 
-
-    // Note: this is set on the Android to save details about the icon that should be used when re-hydrating scheduled notifications when a device has been restarted.
+    // Note: this is set on the Android to save details about the icon that should be used when
+    // re-hydrating scheduled notifications when a device has been restarted.
     public Integer iconResourceId;
 
     public static NotificationDetails from(Map<String, Object> arguments) {
@@ -197,10 +211,10 @@ public class NotificationDetails {
         notificationDetails.body = (String) arguments.get(BODY);
         notificationDetails.scheduledDateTime = (String) arguments.get(SCHEDULED_DATE_TIME);
         notificationDetails.timeZoneName = (String) arguments.get(TIME_ZONE_NAME);
-        if(arguments.containsKey(SCHEDULED_NOTIFICATION_REPEAT_FREQUENCY)) {
+        if (arguments.containsKey(SCHEDULED_NOTIFICATION_REPEAT_FREQUENCY)) {
             notificationDetails.scheduledNotificationRepeatFrequency = ScheduledNotificationRepeatFrequency.values()[(Integer) arguments.get(SCHEDULED_NOTIFICATION_REPEAT_FREQUENCY)];
         }
-        if(arguments.containsKey(MATCH_DATE_TIME_COMPONENTS)) {
+        if (arguments.containsKey(MATCH_DATE_TIME_COMPONENTS)) {
             notificationDetails.matchDateTimeComponents = DateTimeComponents.values()[(Integer) arguments.get(MATCH_DATE_TIME_COMPONENTS)];
         }
         if (arguments.containsKey(MILLISECONDS_SINCE_EPOCH)) {
@@ -213,21 +227,19 @@ public class NotificationDetails {
             notificationDetails.repeatInterval = RepeatInterval.values()[(Integer) arguments.get(REPEAT_INTERVAL)];
         }
         if (arguments.containsKey(REPEAT_TIME)) {
-            @SuppressWarnings("unchecked")
-            Map<String, Object> repeatTimeParams = (Map<String, Object>) arguments.get(REPEAT_TIME);
+            @SuppressWarnings("unchecked") Map<String, Object> repeatTimeParams = (Map<String, Object>) arguments.get(REPEAT_TIME);
             notificationDetails.repeatTime = Time.from(repeatTimeParams);
         }
         if (arguments.containsKey(DAY)) {
             notificationDetails.day = (Integer) arguments.get(DAY);
         }
-        
+
         readPlatformSpecifics(arguments, notificationDetails);
         return notificationDetails;
     }
 
     private static void readPlatformSpecifics(Map<String, Object> arguments, NotificationDetails notificationDetails) {
-        @SuppressWarnings("unchecked")
-        Map<String, Object> platformChannelSpecifics = (Map<String, Object>) arguments.get(PLATFORM_SPECIFICS);
+        @SuppressWarnings("unchecked") Map<String, Object> platformChannelSpecifics = (Map<String, Object>) arguments.get(PLATFORM_SPECIFICS);
         if (platformChannelSpecifics != null) {
             notificationDetails.autoCancel = (Boolean) platformChannelSpecifics.get(AUTO_CANCEL);
             notificationDetails.ongoing = (Boolean) platformChannelSpecifics.get(ONGOING);
@@ -241,8 +253,9 @@ public class NotificationDetails {
             readGroupingInformation(notificationDetails, platformChannelSpecifics);
             notificationDetails.onlyAlertOnce = (Boolean) platformChannelSpecifics.get(ONLY_ALERT_ONCE);
             notificationDetails.showWhen = (Boolean) platformChannelSpecifics.get(SHOW_WHEN);
-            notificationDetails.when = parseLong(platformChannelSpecifics.get(WHEN));
+            notificationDetails.when = LongUtils.parseLong(platformChannelSpecifics.get(WHEN));
             notificationDetails.usesChronometer = (Boolean) platformChannelSpecifics.get(USES_CHRONOMETER);
+            notificationDetails.chronometerCountDown = (Boolean) platformChannelSpecifics.get(CHRONOMETER_COUNT_DOWN);
             readProgressInformation(notificationDetails, platformChannelSpecifics);
             readColor(notificationDetails, platformChannelSpecifics);
             readChannelInformation(notificationDetails, platformChannelSpecifics);
@@ -250,17 +263,33 @@ public class NotificationDetails {
             readLargeIconInformation(notificationDetails, platformChannelSpecifics);
             notificationDetails.ticker = (String) platformChannelSpecifics.get(TICKER);
             notificationDetails.visibility = (Integer) platformChannelSpecifics.get(VISIBILITY);
-            notificationDetails.allowWhileIdle = (Boolean) platformChannelSpecifics.get(ALLOW_WHILE_IDLE);
-            notificationDetails.timeoutAfter = parseLong(platformChannelSpecifics.get(TIMEOUT_AFTER));
+            if (platformChannelSpecifics.containsKey(SCHEDULE_MODE)) {
+                notificationDetails.scheduleMode = ScheduleMode.valueOf((String) platformChannelSpecifics.get(SCHEDULE_MODE));
+            }
+            notificationDetails.timeoutAfter = LongUtils.parseLong(platformChannelSpecifics.get(TIMEOUT_AFTER));
             notificationDetails.category = (String) platformChannelSpecifics.get(CATEGORY);
             notificationDetails.fullScreenIntent = (Boolean) platformChannelSpecifics.get((FULL_SCREEN_INTENT));
             notificationDetails.shortcutId = (String) platformChannelSpecifics.get(SHORTCUT_ID);
             notificationDetails.additionalFlags = (int[]) platformChannelSpecifics.get(ADDITIONAL_FLAGS);
-            notificationDetails.customLayoutLegacyName = (String) platformChannelSpecifics.get(CUSTOM_LAYOUT_LEGACY_NAME);
             notificationDetails.subText = (String) platformChannelSpecifics.get(SUB_TEXT);
             notificationDetails.tag = (String) platformChannelSpecifics.get(TAG);
-            notificationDetails.customLayoutCollapsedName =  (String) platformChannelSpecifics.get(CUSTOM_LAYOUT_COLLAPSED_NAME);
-            notificationDetails.customLayoutExpandedName =  (String) platformChannelSpecifics.get(CUSTOM_LAYOUT_EXPANDED_NAME);
+            notificationDetails.colorized = (Boolean) platformChannelSpecifics.get(COLORIZED);
+            notificationDetails.number = (Integer) platformChannelSpecifics.get(NUMBER);
+            notificationDetails.audioAttributesUsage = (Integer) platformChannelSpecifics.get(AUDIO_ATTRIBUTES_USAGE);
+            notificationDetails.customLayoutLegacyName = (String) platformChannelSpecifics.get(CUSTOM_LAYOUT_LEGACY_NAME);
+            notificationDetails.customLayoutCollapsedName = (String) platformChannelSpecifics.get(CUSTOM_LAYOUT_COLLAPSED_NAME);
+            notificationDetails.customLayoutExpandedName = (String) platformChannelSpecifics.get(CUSTOM_LAYOUT_EXPANDED_NAME);
+
+            if (platformChannelSpecifics.containsKey(ACTIONS)) {
+                @SuppressWarnings("unchecked") List<Map<String, Object>> inputActions = (List<Map<String, Object>>) platformChannelSpecifics.get(ACTIONS);
+                if (inputActions != null && !inputActions.isEmpty()) {
+                    notificationDetails.actions = new ArrayList<>();
+                    for (Map<String, Object> input : inputActions) {
+                        final NotificationAction action = new NotificationAction(input);
+                        notificationDetails.actions.add(action);
+                    }
+                }
+            }
         }
     }
 
@@ -290,7 +319,7 @@ public class NotificationDetails {
     }
 
     private static void readLargeIconInformation(NotificationDetails notificationDetails, Map<String, Object> platformChannelSpecifics) {
-        notificationDetails.largeIcon = (String) platformChannelSpecifics.get(LARGE_ICON);
+        notificationDetails.largeIcon = platformChannelSpecifics.get(LARGE_ICON);
         if (platformChannelSpecifics.containsKey(LARGE_ICON_BITMAP_SOURCE)) {
             Integer argumentValue = (Integer) platformChannelSpecifics.get(LARGE_ICON_BITMAP_SOURCE);
             if (argumentValue != null) {
@@ -308,8 +337,8 @@ public class NotificationDetails {
     private static void readSoundInformation(NotificationDetails notificationDetails, Map<String, Object> platformChannelSpecifics) {
         notificationDetails.playSound = (Boolean) platformChannelSpecifics.get(PLAY_SOUND);
         notificationDetails.sound = (String) platformChannelSpecifics.get(SOUND);
-        Integer soundSourceIndex = (Integer)platformChannelSpecifics.get(SOUND_SOURCE);
-        if(soundSourceIndex != null) {
+        Integer soundSourceIndex = (Integer) platformChannelSpecifics.get(SOUND_SOURCE);
+        if (soundSourceIndex != null) {
             notificationDetails.soundSource = SoundSource.values()[soundSourceIndex];
         }
     }
@@ -381,7 +410,7 @@ public class NotificationDetails {
             return null;
         }
         Boolean bot = (Boolean) person.get(BOT);
-        String icon = (String) person.get(ICON);
+        Object icon = person.get(ICON);
         Integer iconSourceIndex = (Integer) person.get(ICON_SOURCE);
         IconSource iconSource = iconSourceIndex == null ? null : IconSource.values()[iconSourceIndex];
         Boolean important = (Boolean) person.get(IMPORTANT);
@@ -407,8 +436,7 @@ public class NotificationDetails {
         Boolean htmlFormatContentTitle = (Boolean) styleInformation.get(HTML_FORMAT_CONTENT_TITLE);
         String summaryText = (String) styleInformation.get(SUMMARY_TEXT);
         Boolean htmlFormatSummaryText = (Boolean) styleInformation.get(HTML_FORMAT_SUMMARY_TEXT);
-        @SuppressWarnings("unchecked")
-        ArrayList<String> lines = (ArrayList<String>) styleInformation.get(LINES);
+        @SuppressWarnings("unchecked") ArrayList<String> lines = (ArrayList<String>) styleInformation.get(LINES);
         Boolean htmlFormatLines = (Boolean) styleInformation.get(HTML_FORMAT_LINES);
         notificationDetails.styleInformation = new InboxStyleInformation(defaultStyleInformation.htmlFormatTitle, defaultStyleInformation.htmlFormatBody, contentTitle, htmlFormatContentTitle, summaryText, htmlFormatSummaryText, lines, htmlFormatLines);
     }
@@ -428,13 +456,13 @@ public class NotificationDetails {
         Boolean htmlFormatContentTitle = (Boolean) styleInformation.get(HTML_FORMAT_CONTENT_TITLE);
         String summaryText = (String) styleInformation.get(SUMMARY_TEXT);
         Boolean htmlFormatSummaryText = (Boolean) styleInformation.get(HTML_FORMAT_SUMMARY_TEXT);
-        String largeIcon = (String) styleInformation.get(LARGE_ICON);
+        Object largeIcon = styleInformation.get(LARGE_ICON);
         BitmapSource largeIconBitmapSource = null;
         if (styleInformation.containsKey(LARGE_ICON_BITMAP_SOURCE)) {
             Integer largeIconBitmapSourceArgument = (Integer) styleInformation.get(LARGE_ICON_BITMAP_SOURCE);
             largeIconBitmapSource = BitmapSource.values()[largeIconBitmapSourceArgument];
         }
-        String bigPicture = (String) styleInformation.get(BIG_PICTURE);
+        Object bigPicture = styleInformation.get(BIG_PICTURE);
         Integer bigPictureBitmapSourceArgument = (Integer) styleInformation.get(BIG_PICTURE_BITMAP_SOURCE);
         BitmapSource bigPictureBitmapSource = BitmapSource.values()[bigPictureBitmapSourceArgument];
         Boolean showThumbnail = (Boolean) styleInformation.get(HIDE_EXPANDED_LARGE_ICON);
