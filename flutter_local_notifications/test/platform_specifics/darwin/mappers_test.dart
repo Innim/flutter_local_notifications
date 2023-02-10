@@ -1,10 +1,7 @@
 // ignore_for_file: always_specify_types
 
-import 'package:flutter_local_notifications/src/platform_specifics/darwin/mappers.dart';
-import 'package:flutter_local_notifications/src/platform_specifics/darwin/notification_action.dart';
-import 'package:flutter_local_notifications/src/platform_specifics/darwin/notification_action_option.dart';
-import 'package:flutter_local_notifications/src/platform_specifics/darwin/notification_category.dart';
-import 'package:flutter_local_notifications/src/platform_specifics/darwin/notification_category_option.dart';
+import 'package:flutter_local_notifications_plus/flutter_local_notifications_plus.dart';
+import 'package:flutter_local_notifications_plus/src/platform_specifics/darwin/mappers.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
