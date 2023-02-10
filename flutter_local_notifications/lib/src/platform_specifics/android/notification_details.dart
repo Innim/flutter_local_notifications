@@ -57,6 +57,7 @@ class AndroidNotificationAction {
     this.allowGeneratedReplies = false,
     this.inputs = const <AndroidNotificationActionInput>[],
     this.cancelNotification = true,
+    this.customViewId,
   });
 
   /// This ID will be sent back in the action handler defined in
@@ -94,6 +95,9 @@ class AndroidNotificationAction {
   /// Set whether the notification should be canceled when this action is
   /// selected.
   final bool cancelNotification;
+
+  /// Specifies the view id of custom notification layout.
+  final String? customViewId;
 }
 
 /// Contains notification details specific to Android.

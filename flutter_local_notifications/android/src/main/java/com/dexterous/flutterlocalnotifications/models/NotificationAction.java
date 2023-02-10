@@ -87,6 +87,8 @@ public class NotificationAction implements Serializable {
     private static final String ALLOW_GENERATED_REPLIES = "allowGeneratedReplies";
     private static final String CANCEL_NOTIFICATION = "cancelNotification";
 
+    private static final String CUSTOM_VIEW_ID = "customViewId";
+
     public final String id;
     public final String title;
     @Nullable
@@ -107,6 +109,8 @@ public class NotificationAction implements Serializable {
     // before null-safety was added in
     @Nullable
     public final List<NotificationActionInput> actionInputs = new ArrayList<>();
+    @Nullable
+    public final String customViewId;
 
     public NotificationAction(Map<String, Object> arguments) {
         id = (String) arguments.get(ID);
@@ -150,6 +154,8 @@ public class NotificationAction implements Serializable {
                 }
             }
         }
+
+        customViewId = (String) arguments.get(CUSTOM_VIEW_ID);
     }
 
     public static <T> List<T> castList(
