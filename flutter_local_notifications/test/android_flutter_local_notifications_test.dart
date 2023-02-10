@@ -1,4 +1,3 @@
-import 'dart:typed_data';
 
 import 'package:clock/clock.dart';
 import 'package:flutter/foundation.dart';
@@ -167,6 +166,9 @@ void main() {
               'fullScreenIntent': false,
               'shortcutId': null,
               'subText': null,
+              'customLayoutLegacyName': null,
+              'customLayoutCollapsedName': null,
+              'customLayoutExpandedName': null,
               'style': AndroidNotificationStyle.defaultStyle.index,
               'styleInformation': <String, Object>{
                 'htmlFormatContent': false,
@@ -1956,6 +1958,9 @@ void main() {
                     'fullScreenIntent': false,
                     'shortcutId': null,
                     'subText': null,
+                    'customLayoutLegacyName': null,
+                    'customLayoutCollapsedName': null,
+                    'customLayoutExpandedName': null,
                     'style': AndroidNotificationStyle.defaultStyle.index,
                     'styleInformation': <String, Object>{
                       'htmlFormatContent': false,
@@ -2546,6 +2551,9 @@ void main() {
                   'fullScreenIntent': false,
                   'shortcutId': null,
                   'subText': null,
+                  'customLayoutLegacyName': null,
+                  'customLayoutCollapsedName': null,
+                  'customLayoutExpandedName': null,
                   'style': AndroidNotificationStyle.defaultStyle.index,
                   'styleInformation': <String, Object>{
                     'htmlFormatContent': false,
