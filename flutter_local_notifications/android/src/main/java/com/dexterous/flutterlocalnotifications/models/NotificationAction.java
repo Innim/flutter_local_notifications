@@ -84,6 +84,8 @@ public class NotificationAction implements Serializable {
   private static final String ALLOW_GENERATED_REPLIES = "allowGeneratedReplies";
   private static final String CANCEL_NOTIFICATION = "cancelNotification";
 
+  private static final String CUSTOM_VIEW_ID = "customViewId";
+
   public final String id;
   public final String title;
   @Nullable public final Integer titleColor;
@@ -96,6 +98,7 @@ public class NotificationAction implements Serializable {
   // actionInputs is annotated as nullable as the Flutter API use to allow this to be nullable
   // before null-safety was added in
   @Nullable public final List<NotificationActionInput> actionInputs = new ArrayList<>();
+  @Nullable public final String customViewId;
 
   public NotificationAction(Map<String, Object> arguments) {
     id = (String) arguments.get(ID);
@@ -139,6 +142,8 @@ public class NotificationAction implements Serializable {
         }
       }
     }
+
+    customViewId = (String) arguments.get(CUSTOM_VIEW_ID);
   }
 
   public static <T> List<T> castList(

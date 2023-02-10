@@ -89,6 +89,7 @@ void main() {
             showsUserInterface: true,
             allowGeneratedReplies: true,
             cancelNotification: false,
+            customViewId: 'action_1'
           ),
           AndroidNotificationAction(
             'action2',
@@ -101,6 +102,7 @@ void main() {
                 allowedMimeTypes: <String>{'text/plain'},
               ),
             ],
+            customViewId: 'action_2'
           )
         ],
       );
@@ -190,7 +192,8 @@ void main() {
                   'showsUserInterface': true,
                   'allowGeneratedReplies': true,
                   'inputs': <Object>[],
-                  'cancelNotification': false
+                  'cancelNotification': false,
+                  'customViewId': 'action_1'
                 },
                 <String, Object>{
                   'id': 'action2',
@@ -211,6 +214,7 @@ void main() {
                     }
                   ],
                   'cancelNotification': true,
+                  'customViewId': 'action_2'
                 }
               ],
             },

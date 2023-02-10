@@ -1,3 +1,7 @@
+# [13.0.0+1]
+
+* [Android] added support for actions in custom notification layouts by specifying `customViewId` in `AndroidNotificationAction`.
+
 # [13.0.0]
 
 * [Android] Bumped Android Gradle plugin to 7.3.1. Thanks to the PR from [Rexios](https://github.com/Rexios80)
