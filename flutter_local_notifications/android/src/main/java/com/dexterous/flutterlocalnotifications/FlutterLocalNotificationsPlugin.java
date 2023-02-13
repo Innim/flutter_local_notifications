@@ -331,10 +331,10 @@ public class FlutterLocalNotificationsPlugin
     builder.setLargeIcon(
         getBitmapFromSource(
             context, notificationDetails.largeIcon, notificationDetails.largeIconBitmapSource));
-      Integer color = notificationDetails.color;
-      if (color != null) {
-          builder.setColor(color);
-      }
+    Integer color = notificationDetails.color;
+    if (color != null) {
+        builder.setColor(color);
+    }
 
     if (notificationDetails.colorized != null) {
       builder.setColorized(notificationDetails.colorized);
@@ -473,13 +473,9 @@ public class FlutterLocalNotificationsPlugin
     }
   }
 
-  private static void setCustomContentViewImage(Context context, RemoteViews contentView, Resources resources, String icon, BitmapSource source, String name, String packageName) {
+  private static void setCustomContentViewImage(Context context, RemoteViews contentView, Resources resources, Object icon, BitmapSource source, String name, String packageName) {
     int imageId = resources.getIdentifier(name, "id", packageName);
-    if (!StringUtils.isNullOrEmpty(icon)) {
-      contentView.setImageViewBitmap(imageId, getBitmapFromSource(context, icon, source));
-    } else {
-      contentView.setViewVisibility(imageId, View.GONE);
-    }
+    contentView.setImageViewBitmap(imageId, getBitmapFromSource(context, icon, source));
   }
 
   private static Boolean canCreateNotificationChannel(
