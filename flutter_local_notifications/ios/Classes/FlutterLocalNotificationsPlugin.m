@@ -162,8 +162,8 @@ static FlutterError *getFlutterError(NSError *error) {
                   result:(FlutterResult)result {
   if ([INITIALIZE_METHOD isEqualToString:call.method]) {
     [self initialize:call.arguments result:result];
-    } else if([SET_BADGE_NUMBER_METHOD isEqualToString:call.method]) {
-        [self setBadgeNumber:call.arguments result:result];
+  } else if ([SET_BADGE_NUMBER_METHOD isEqualToString:call.method]) {
+    [self setBadgeNumber:call.arguments result:result];
   } else if ([GET_CALLBACK_METHOD isEqualToString:call.method]) {
     result([_flutterEngineManager getCallbackHandle]);
   } else if ([SHOW_METHOD isEqualToString:call.method]) {
@@ -437,17 +437,19 @@ static FlutterError *getFlutterError(NSError *error) {
 
   _initialized = true;
 }
-- (void)setBadgeNumber:(NSDictionary * _Nonnull)arguments result:(FlutterResult _Nonnull)result {
-    int value = 0;
-    if([self containsKey:VALUE forDictionary:arguments]) {
-        value = [arguments[VALUE] intValue];
-    }
+- (void)setBadgeNumber:(NSDictionary *_Nonnull)arguments
+                result:(FlutterResult _Nonnull)result {
+  int value = 0;
+  if ([self containsKey:VALUE forDictionary:arguments]) {
+    value = [arguments[VALUE] intValue];
+  }
 
-    [UIApplication sharedApplication].applicationIconBadgeNumber = value;
-    result(nil);
+  [UIApplication sharedApplication].applicationIconBadgeNumber = value;
+  result(nil);
 }
 
-- (void)requestPermissions:(NSDictionary *_Nonnull)arguments result:(FlutterResult _Nonnull)result {
+- (void)requestPermissions:(NSDictionary *_Nonnull)arguments
+                    result:(FlutterResult _Nonnull)result {
   bool soundPermission = false;
   bool alertPermission = false;
   bool badgePermission = false;
