@@ -1,10 +1,15 @@
+import 'package:flutter/foundation.dart';
+
 /// Specifies the source for a bitmap used by Android notifications.
 enum AndroidBitmapSource {
   /// A drawable.
   drawable,
 
   /// A file path.
-  filePath
+  filePath,
+
+  /// A byte array bitmap.
+  byteArray,
 }
 
 /// Specifies the source for icons.
@@ -19,7 +24,10 @@ enum AndroidIconSource {
   contentUri,
 
   /// A Flutter asset that is a bitmap.
-  flutterBitmapAsset
+  flutterBitmapAsset,
+
+  /// A byte array bitmap.
+  byteArray,
 }
 
 /// The available notification styles on Android.
@@ -62,9 +70,99 @@ enum AndroidNotificationChannelAction {
   update
 }
 
+/// The available foreground types for an Android service.
+@immutable
+class AndroidServiceForegroundType {
+  /// Constructs an instance of [AndroidServiceForegroundType].
+  const AndroidServiceForegroundType(this.value);
+
+  /// Corresponds to [`ServiceInfo.FOREGROUND_SERVICE_TYPE_MANIFEST`](https://developer.android.com/reference/android/content/pm/ServiceInfo#FOREGROUND_SERVICE_TYPE_MANIFEST).
+  static const AndroidServiceForegroundType foregroundServiceTypeManifest =
+      AndroidServiceForegroundType(-1);
+
+  /// Corresponds to [`ServiceInfo.FOREGROUND_SERVICE_TYPE_NONE`](https://developer.android.com/reference/android/content/pm/ServiceInfo#FOREGROUND_SERVICE_TYPE_NONE).
+  static const AndroidServiceForegroundType foregroundServiceTypeNone =
+      AndroidServiceForegroundType(0);
+
+  /// Corresponds to [`ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC`](https://developer.android.com/reference/android/content/pm/ServiceInfo#FOREGROUND_SERVICE_TYPE_DATA_SYNC).
+  static const AndroidServiceForegroundType foregroundServiceTypeDataSync =
+      AndroidServiceForegroundType(1);
+
+  /// Corresponds to [`ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK`](https://developer.android.com/reference/android/content/pm/ServiceInfo#FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK).
+  static const AndroidServiceForegroundType foregroundServiceTypeMediaPlayback =
+      AndroidServiceForegroundType(2);
+
+  /// Corresponds to [`ServiceInfo.FOREGROUND_SERVICE_TYPE_PHONE_CALL`](https://developer.android.com/reference/android/content/pm/ServiceInfo#FOREGROUND_SERVICE_TYPE_PHONE_CALL).
+  static const AndroidServiceForegroundType foregroundServiceTypePhoneCall =
+      AndroidServiceForegroundType(4);
+
+  /// Corresponds to [`ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION`](https://developer.android.com/reference/android/content/pm/ServiceInfo#FOREGROUND_SERVICE_TYPE_LOCATION).
+  static const AndroidServiceForegroundType foregroundServiceTypeLocation =
+      AndroidServiceForegroundType(8);
+
+  /// Corresponds to [`ServiceInfo.FOREGROUND_SERVICE_TYPE_CONNECTED_DEVICE`](https://developer.android.com/reference/android/content/pm/ServiceInfo#FOREGROUND_SERVICE_TYPE_CONNECTED_DEVICE).
+  static const AndroidServiceForegroundType
+      foregroundServiceTypeConnectedDevice = AndroidServiceForegroundType(16);
+
+  /// Corresponds to [`ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PROJECTION`](https://developer.android.com/reference/android/content/pm/ServiceInfo#FOREGROUND_SERVICE_TYPE_MEDIA_PROJECTION).
+  static const AndroidServiceForegroundType
+      foregroundServiceTypeMediaProjection = AndroidServiceForegroundType(32);
+
+  /// Corresponds to [`ServiceInfo.FOREGROUND_SERVICE_TYPE_CAMERA`](https://developer.android.com/reference/android/content/pm/ServiceInfo#FOREGROUND_SERVICE_TYPE_CAMERA).
+  static const AndroidServiceForegroundType foregroundServiceTypeCamera =
+      AndroidServiceForegroundType(64);
+
+  /// Corresponds to [`ServiceInfo.FOREGROUND_SERVICE_TYPE_MICROPHONE`](https://developer.android.com/reference/android/content/pm/ServiceInfo#FOREGROUND_SERVICE_TYPE_MICROPHONE).
+  static const AndroidServiceForegroundType foregroundServiceTypeMicrophone =
+      AndroidServiceForegroundType(128);
+
+  /// The integer representation.
+  final int value;
+
+  @override
+  int get hashCode => value;
+
+  @override
+  bool operator ==(Object other) =>
+      other is AndroidServiceForegroundType && other.value == value;
+}
+
+/// The available start types for an Android service.
+@immutable
+class AndroidServiceStartType {
+  /// Constructs an instance of [AndroidServiceStartType].
+  const AndroidServiceStartType(this.value);
+
+  /// Corresponds to [`Service.START_STICKY_COMPATIBILITY`](https://developer.android.com/reference/android/app/Service#START_STICKY_COMPATIBILITY).
+  static const AndroidServiceStartType startStickyCompatibility =
+      AndroidServiceStartType(0);
+
+  /// Corresponds to [`Service.START_STICKY`](https://developer.android.com/reference/android/app/Service#START_STICKY).
+  static const AndroidServiceStartType startSticky = AndroidServiceStartType(1);
+
+  /// Corresponds to [`Service.START_NOT_STICKY`](https://developer.android.com/reference/android/app/Service#START_NOT_STICKY).
+  static const AndroidServiceStartType startNotSticky =
+      AndroidServiceStartType(2);
+
+  /// Corresponds to [`Service.START_REDELIVER_INTENT`](https://developer.android.com/reference/android/app/Service#START_REDELIVER_INTENT).
+  static const AndroidServiceStartType startRedeliverIntent =
+      AndroidServiceStartType(3);
+
+  /// The integer representation.
+  final int value;
+
+  @override
+  int get hashCode => value;
+
+  @override
+  bool operator ==(Object other) =>
+      other is AndroidServiceStartType && other.value == value;
+}
+
 /// The available importance levels for Android notifications.
 ///
 /// Required for Android 8.0 or newer.
+@immutable
 class Importance {
   /// Constructs an instance of [Importance].
   const Importance(this.value);
@@ -95,10 +193,17 @@ class Importance {
       <Importance>[unspecified, none, min, low, defaultImportance, high, max];
 
   /// The integer representation.
-  final int? value;
+  final int value;
+
+  @override
+  int get hashCode => value;
+
+  @override
+  bool operator ==(Object other) => other is Importance && other.value == value;
 }
 
 /// Priority for notifications on Android 7.1 and lower.
+@immutable
 class Priority {
   /// Constructs an instance of [Priority].
   const Priority(this.value);
@@ -124,6 +229,12 @@ class Priority {
 
   /// The integer representation.
   final int value;
+
+  @override
+  int get hashCode => value;
+
+  @override
+  bool operator ==(Object other) => other is Priority && other.value == value;
 }
 
 /// The available alert behaviours for grouped notifications.
@@ -150,4 +261,84 @@ enum NotificationVisibility {
 
   /// Do not reveal any part of this notification on a secure lockscreen.
   secret,
+}
+
+/// The available audio attributes usages for an Android service.
+@immutable
+class AudioAttributesUsage {
+  /// Constructs an instance of [AudioAttributesUsage].
+  const AudioAttributesUsage._(this.value);
+
+  /// Corresponds to [`AudioAttributes.USAGE_ALARM`](https://developer.android.com/reference/android/media/AudioAttributes#USAGE_ALARM).
+  static const AudioAttributesUsage alarm = AudioAttributesUsage._(4);
+
+  /// Corresponds to [`AudioAttributes.USAGE_ASSISTANCE_ACCESSIBILITY`](https://developer.android.com/reference/android/media/AudioAttributes#USAGE_ASSISTANCE_ACCESSIBILITY).
+  static const AudioAttributesUsage assistanceAccessibility =
+      AudioAttributesUsage._(11);
+
+  /// Corresponds to [`AudioAttributes.USAGE_ASSISTANCE_NAVIGATION_GUIDANCE`](https://developer.android.com/reference/android/media/AudioAttributes#USAGE_ASSISTANCE_NAVIGATION_GUIDANCE).
+  static const AudioAttributesUsage assistanceNavigationGuidance =
+      AudioAttributesUsage._(12);
+
+  /// Corresponds to [`AudioAttributes.USAGE_ASSISTANCE_SONIFICATION`](https://developer.android.com/reference/android/media/AudioAttributes#USAGE_ASSISTANCE_SONIFICATION).
+  static const AudioAttributesUsage assistanceSonification =
+      AudioAttributesUsage._(13);
+
+  /// Corresponds to [`AudioAttributes.USAGE_ASSISTANT`](https://developer.android.com/reference/android/media/AudioAttributes#USAGE_ASSISTANT).
+  static const AudioAttributesUsage assistant = AudioAttributesUsage._(16);
+
+  /// Corresponds to [`AudioAttributes.USAGE_GAME`](https://developer.android.com/reference/android/media/AudioAttributes#USAGE_GAME).
+  static const AudioAttributesUsage game = AudioAttributesUsage._(14);
+
+  /// Corresponds to [`AudioAttributes.USAGE_MEDIA`](https://developer.android.com/reference/android/media/AudioAttributes#USAGE_MEDIA).
+  static const AudioAttributesUsage media = AudioAttributesUsage._(1);
+
+  /// Corresponds to [`AudioAttributes.USAGE_NOTIFICATION`](https://developer.android.com/reference/android/media/AudioAttributes#USAGE_NOTIFICATION).
+  static const AudioAttributesUsage notification = AudioAttributesUsage._(5);
+
+  /// Corresponds to [`AudioAttributes.USAGE_NOTIFICATION_EVENT`](https://developer.android.com/reference/android/media/AudioAttributes#USAGE_NOTIFICATION_EVENT).
+  static const AudioAttributesUsage notificationEvent =
+      AudioAttributesUsage._(10);
+
+  /// Corresponds to [`AudioAttributes.USAGE_NOTIFICATION_RINGTONE`](https://developer.android.com/reference/android/media/AudioAttributes#USAGE_NOTIFICATION_RINGTONE).
+  static const AudioAttributesUsage notificationRingtone =
+      AudioAttributesUsage._(6);
+
+  /// Corresponds to [`AudioAttributes.USAGE_UNKNOWN`](https://developer.android.com/reference/android/media/AudioAttributes#USAGE_UNKNOWN).
+  static const AudioAttributesUsage unknown = AudioAttributesUsage._(0);
+
+  /// Corresponds to [`AudioAttributes.USAGE_VOICE_COMMUNICATION`](https://developer.android.com/reference/android/media/AudioAttributes#USAGE_VOICE_COMMUNICATION).
+  static const AudioAttributesUsage voiceCommunication =
+      AudioAttributesUsage._(2);
+
+  /// Corresponds to [`AudioAttributes.USAGE_VOICE_COMMUNICATION_SIGNALLING`](https://developer.android.com/reference/android/media/AudioAttributes#USAGE_VOICE_COMMUNICATION_SIGNALLING).
+  static const AudioAttributesUsage voiceCommunicationSignalling =
+      AudioAttributesUsage._(3);
+
+  /// All the possible values for the [AudioAttributesUsage] enumeration.
+  static List<AudioAttributesUsage> get values => <AudioAttributesUsage>[
+        alarm,
+        assistanceAccessibility,
+        assistanceNavigationGuidance,
+        assistanceSonification,
+        assistant,
+        game,
+        media,
+        notification,
+        notificationEvent,
+        notificationRingtone,
+        unknown,
+        voiceCommunication,
+        voiceCommunicationSignalling,
+      ];
+
+  /// The integer representation.
+  final int value;
+
+  @override
+  int get hashCode => value;
+
+  @override
+  bool operator ==(Object other) =>
+      other is AudioAttributesUsage && other.value == value;
 }
