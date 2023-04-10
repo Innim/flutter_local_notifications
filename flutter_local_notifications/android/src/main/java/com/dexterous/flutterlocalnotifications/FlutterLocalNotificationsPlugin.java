@@ -333,7 +333,7 @@ public class FlutterLocalNotificationsPlugin
             context, notificationDetails.largeIcon, notificationDetails.largeIconBitmapSource));
     Integer color = notificationDetails.color;
     if (color != null) {
-        builder.setColor(color);
+      builder.setColor(color);
     }
 
     if (notificationDetails.colorized != null) {
@@ -376,23 +376,47 @@ public class FlutterLocalNotificationsPlugin
           resources = manager.getResourcesForApplication(packageName);
 
           if (VERSION.SDK_INT < VERSION_CODES.S) {
-            RemoteViews contentView = setCustomContentView(context, resources, notificationDetails, notificationDetails.customLayoutLegacyName, packageName);
+            RemoteViews contentView =
+                setCustomContentView(
+                    context,
+                    resources,
+                    notificationDetails,
+                    notificationDetails.customLayoutLegacyName,
+                    packageName);
             if (notificationDetails.actions != null) {
-                setCustomContentViewActions(contentView, resources, packageName, actionIntents, notificationDetails.actions);
+              setCustomContentViewActions(
+                  contentView, resources, packageName, actionIntents, notificationDetails.actions);
             }
             builder.setCustomContentView(contentView);
           } else {
             String customLayoutCollapsedName = notificationDetails.customLayoutCollapsedName;
             if (!StringUtils.isNullOrEmpty(customLayoutCollapsedName)) {
-              RemoteViews contentView = setCustomContentView(context, resources, notificationDetails, customLayoutCollapsedName, packageName);
+              RemoteViews contentView =
+                  setCustomContentView(
+                      context,
+                      resources,
+                      notificationDetails,
+                      customLayoutCollapsedName,
+                      packageName);
               builder.setCustomContentView(contentView);
             }
 
             String customLayoutExpandedName = notificationDetails.customLayoutExpandedName;
             if (!StringUtils.isNullOrEmpty(customLayoutExpandedName)) {
-              RemoteViews contentView = setCustomContentView(context, resources, notificationDetails, customLayoutExpandedName, packageName);
+              RemoteViews contentView =
+                  setCustomContentView(
+                      context,
+                      resources,
+                      notificationDetails,
+                      customLayoutExpandedName,
+                      packageName);
               if (notificationDetails.actions != null) {
-                  setCustomContentViewActions(contentView, resources, packageName, actionIntents, notificationDetails.actions);
+                setCustomContentViewActions(
+                    contentView,
+                    resources,
+                    packageName,
+                    actionIntents,
+                    notificationDetails.actions);
               }
               builder.setCustomBigContentView(contentView);
             }
@@ -401,7 +425,6 @@ public class FlutterLocalNotificationsPlugin
           e.printStackTrace();
         }
       }
-
     }
 
     if (!StringUtils.isNullOrEmpty(notificationDetails.subText)) {
@@ -435,36 +458,56 @@ public class FlutterLocalNotificationsPlugin
     if (VERSION.SDK_INT < VERSION_CODES.S) {
       return !StringUtils.isNullOrEmpty(notificationDetails.customLayoutLegacyName);
     } else {
-      return !StringUtils.isNullOrEmpty(notificationDetails.customLayoutCollapsedName) ||
-              !StringUtils.isNullOrEmpty(notificationDetails.customLayoutExpandedName);
+      return !StringUtils.isNullOrEmpty(notificationDetails.customLayoutCollapsedName)
+          || !StringUtils.isNullOrEmpty(notificationDetails.customLayoutExpandedName);
     }
   }
 
-  private static RemoteViews setCustomContentView(Context context, Resources resources, NotificationDetails notificationDetails, String layoutName, String packageName) {
+  private static RemoteViews setCustomContentView(
+      Context context,
+      Resources resources,
+      NotificationDetails notificationDetails,
+      String layoutName,
+      String packageName) {
     int layoutId = resources.getIdentifier(layoutName, "layout", packageName);
     RemoteViews contentView = new RemoteViews(packageName, layoutId);
-    setCustomContentViewField(contentView, resources, notificationDetails.title, "push_title", packageName);
-    setCustomContentViewField(contentView, resources, notificationDetails.body, "push_text", packageName);
-    setCustomContentViewImage(context, contentView, resources, notificationDetails.largeIcon, notificationDetails.largeIconBitmapSource, "push_image", packageName);
+    setCustomContentViewField(
+        contentView, resources, notificationDetails.title, "push_title", packageName);
+    setCustomContentViewField(
+        contentView, resources, notificationDetails.body, "push_text", packageName);
+    setCustomContentViewImage(
+        context,
+        contentView,
+        resources,
+        notificationDetails.largeIcon,
+        notificationDetails.largeIconBitmapSource,
+        "push_image",
+        packageName);
     return contentView;
   }
 
-  private static void setCustomContentViewActions(RemoteViews contentView, Resources resources, String packageName, Map<String, PendingIntent> actionIntents, List<NotificationAction> actions) {
-      for (NotificationAction action : actions) {
-          if (!StringUtils.isNullOrEmpty(action.customViewId)) {
-              int viewId = resources.getIdentifier(action.customViewId, "id", packageName);
-              if (viewId != 0) {
-                  contentView.setTextViewText(viewId, action.title);
-                  if (action.titleColor != null) {
-                      contentView.setTextColor(viewId, action.titleColor);
-                  }
-                  contentView.setOnClickPendingIntent(viewId, actionIntents.get(action.id));
-              }
+  private static void setCustomContentViewActions(
+      RemoteViews contentView,
+      Resources resources,
+      String packageName,
+      Map<String, PendingIntent> actionIntents,
+      List<NotificationAction> actions) {
+    for (NotificationAction action : actions) {
+      if (!StringUtils.isNullOrEmpty(action.customViewId)) {
+        int viewId = resources.getIdentifier(action.customViewId, "id", packageName);
+        if (viewId != 0) {
+          contentView.setTextViewText(viewId, action.title);
+          if (action.titleColor != null) {
+            contentView.setTextColor(viewId, action.titleColor);
           }
+          contentView.setOnClickPendingIntent(viewId, actionIntents.get(action.id));
+        }
       }
+    }
   }
 
-  private static void setCustomContentViewField(RemoteViews contentView, Resources resources, String value, String name, String packageName) {
+  private static void setCustomContentViewField(
+      RemoteViews contentView, Resources resources, String value, String name, String packageName) {
     int id = resources.getIdentifier(name, "id", packageName);
     if (!StringUtils.isNullOrEmpty(value)) {
       contentView.setTextViewText(id, value);
@@ -473,7 +516,14 @@ public class FlutterLocalNotificationsPlugin
     }
   }
 
-  private static void setCustomContentViewImage(Context context, RemoteViews contentView, Resources resources, Object icon, BitmapSource source, String name, String packageName) {
+  private static void setCustomContentViewImage(
+      Context context,
+      RemoteViews contentView,
+      Resources resources,
+      Object icon,
+      BitmapSource source,
+      String name,
+      String packageName) {
     int imageId = resources.getIdentifier(name, "id", packageName);
     contentView.setImageViewBitmap(imageId, getBitmapFromSource(context, icon, source));
   }

@@ -125,9 +125,9 @@ public class NotificationDetails implements Serializable {
   private static final String NUMBER = "number";
   private static final String AUDIO_ATTRIBUTES_USAGE = "audioAttributesUsage";
 
-    private static final String CUSTOM_LAYOUT_LEGACY_NAME = "customLayoutLegacyName";
-    private static final String CUSTOM_LAYOUT_COLLAPSED_NAME = "customLayoutCollapsedName";
-    private static final String CUSTOM_LAYOUT_EXPANDED_NAME = "customLayoutExpandedName";
+  private static final String CUSTOM_LAYOUT_LEGACY_NAME = "customLayoutLegacyName";
+  private static final String CUSTOM_LAYOUT_COLLAPSED_NAME = "customLayoutCollapsedName";
+  private static final String CUSTOM_LAYOUT_EXPANDED_NAME = "customLayoutExpandedName";
 
   public Integer id;
   public String title;
@@ -287,9 +287,12 @@ public class NotificationDetails implements Serializable {
       notificationDetails.number = (Integer) platformChannelSpecifics.get(NUMBER);
       notificationDetails.audioAttributesUsage =
           (Integer) platformChannelSpecifics.get(AUDIO_ATTRIBUTES_USAGE);
-        notificationDetails.customLayoutLegacyName = (String) platformChannelSpecifics.get(CUSTOM_LAYOUT_LEGACY_NAME);
-        notificationDetails.customLayoutCollapsedName =  (String) platformChannelSpecifics.get(CUSTOM_LAYOUT_COLLAPSED_NAME);
-        notificationDetails.customLayoutExpandedName =  (String) platformChannelSpecifics.get(CUSTOM_LAYOUT_EXPANDED_NAME);
+      notificationDetails.customLayoutLegacyName =
+          (String) platformChannelSpecifics.get(CUSTOM_LAYOUT_LEGACY_NAME);
+      notificationDetails.customLayoutCollapsedName =
+          (String) platformChannelSpecifics.get(CUSTOM_LAYOUT_COLLAPSED_NAME);
+      notificationDetails.customLayoutExpandedName =
+          (String) platformChannelSpecifics.get(CUSTOM_LAYOUT_EXPANDED_NAME);
 
       if (platformChannelSpecifics.containsKey(ACTIONS)) {
         @SuppressWarnings("unchecked")
@@ -306,15 +309,15 @@ public class NotificationDetails implements Serializable {
     }
   }
 
-    private static Long parseLong(Object object) {
-        if (object instanceof Integer) {
-            return ((Integer) object).longValue();
-        }
-        if (object instanceof Long) {
-            return (Long) object;
-        }
-        return null;
+  private static Long parseLong(Object object) {
+    if (object instanceof Integer) {
+      return ((Integer) object).longValue();
     }
+    if (object instanceof Long) {
+      return (Long) object;
+    }
+    return null;
+  }
 
   private static void readProgressInformation(
       NotificationDetails notificationDetails, Map<String, Object> platformChannelSpecifics) {

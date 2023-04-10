@@ -1,3 +1,7 @@
+# [13.0.0+2]
+
+* Updated `timezone` dependency
+
 # [13.0.0+1]
 
 * [Android] added support for actions in custom notification layouts by specifying `customViewId` in `AndroidNotificationAction`.
