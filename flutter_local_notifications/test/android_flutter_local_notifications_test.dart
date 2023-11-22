@@ -1,3 +1,5 @@
+// ignore: unnecessary_import
+import 'dart:typed_data';
 
 import 'package:clock/clock.dart';
 import 'package:flutter/foundation.dart';
@@ -23,8 +25,8 @@ void main() {
     setUp(() {
       debugDefaultTargetPlatformOverride = TargetPlatform.android;
       flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-      // ignore: always_specify_types
-      channel.setMockMethodCallHandler((methodCall) async {
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(channel, (MethodCall methodCall) async {
         log.add(methodCall);
         if (methodCall.method == 'initialize') {
           return true;
@@ -35,6 +37,7 @@ void main() {
         } else if (methodCall.method == 'getNotificationAppLaunchDetails') {
           return null;
         }
+        return null;
       });
     });
 
@@ -1916,7 +1919,7 @@ void main() {
                   'calledAt': now.millisecondsSinceEpoch,
                   'repeatInterval': repeatInterval.index,
                   'platformSpecifics': <String, Object?>{
-                    'allowWhileIdle': false,
+                    'scheduleMode': 'exact',
                     'icon': null,
                     'channelId': 'channelId',
                     'channelName': 'channelName',
@@ -2002,7 +2005,7 @@ void main() {
             'notification body',
             scheduledDate,
             const NotificationDetails(android: androidNotificationDetails),
-            androidAllowWhileIdle: true,
+            androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
             uiLocalNotificationDateInterpretation:
                 UILocalNotificationDateInterpretation.absoluteTime);
         expect(
@@ -2014,8 +2017,9 @@ void main() {
               'payload': '',
               'timeZoneName': 'Australia/Sydney',
               'scheduledDateTime': convertDateToISO8601String(scheduledDate),
+              'scheduledDateTimeISO8601': scheduledDate.toIso8601String(),
               'platformSpecifics': <String, Object?>{
-                'allowWhileIdle': true,
+                'scheduleMode': 'exactAllowWhileIdle',
                 'icon': null,
                 'channelId': 'channelId',
                 'channelName': 'channelName',
@@ -2098,7 +2102,7 @@ void main() {
             'notification body',
             scheduledDate,
             const NotificationDetails(android: androidNotificationDetails),
-            androidAllowWhileIdle: true,
+            androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
             uiLocalNotificationDateInterpretation:
                 UILocalNotificationDateInterpretation.absoluteTime,
             matchDateTimeComponents: DateTimeComponents.time);
@@ -2111,9 +2115,10 @@ void main() {
               'payload': '',
               'timeZoneName': 'Australia/Sydney',
               'scheduledDateTime': convertDateToISO8601String(scheduledDate),
+              'scheduledDateTimeISO8601': scheduledDate.toIso8601String(),
               'matchDateTimeComponents': DateTimeComponents.time.index,
               'platformSpecifics': <String, Object?>{
-                'allowWhileIdle': true,
+                'scheduleMode': 'exactAllowWhileIdle',
                 'icon': null,
                 'channelId': 'channelId',
                 'channelName': 'channelName',
@@ -2196,7 +2201,7 @@ void main() {
             'notification body',
             scheduledDate,
             const NotificationDetails(android: androidNotificationDetails),
-            androidAllowWhileIdle: true,
+            androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
             uiLocalNotificationDateInterpretation:
                 UILocalNotificationDateInterpretation.absoluteTime,
             matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime);
@@ -2209,10 +2214,11 @@ void main() {
               'payload': '',
               'timeZoneName': 'Australia/Sydney',
               'scheduledDateTime': convertDateToISO8601String(scheduledDate),
+              'scheduledDateTimeISO8601': scheduledDate.toIso8601String(),
               'matchDateTimeComponents':
                   DateTimeComponents.dayOfWeekAndTime.index,
               'platformSpecifics': <String, Object?>{
-                'allowWhileIdle': true,
+                'scheduleMode': 'exactAllowWhileIdle',
                 'icon': null,
                 'channelId': 'channelId',
                 'channelName': 'channelName',
@@ -2451,7 +2457,7 @@ void main() {
               'payload': '',
               'platformSpecifics': null,
             },
-            'startType': AndroidServiceStartType.startSticky.value,
+            'startType': AndroidServiceStartType.startSticky.index,
             'foregroundServiceTypes': null
           }));
     });
@@ -2569,10 +2575,28 @@ void main() {
                   'audioAttributesUsage': 5,
                 },
               },
-              'startType': AndroidServiceStartType.startSticky.value,
+              'startType': AndroidServiceStartType.startSticky.index,
               'foregroundServiceTypes': null
             },
           ));
+    });
+
+    test('requestNotificationsPermission', () async {
+      await flutterLocalNotificationsPlugin
+          .resolvePlatformSpecificImplementation<
+              AndroidFlutterLocalNotificationsPlugin>()!
+          .requestNotificationsPermission();
+      expect(log.last,
+          isMethodCall('requestNotificationsPermission', arguments: null));
+    });
+
+    test('requestExactAlarmsPermission', () async {
+      await flutterLocalNotificationsPlugin
+          .resolvePlatformSpecificImplementation<
+              AndroidFlutterLocalNotificationsPlugin>()!
+          .requestExactAlarmsPermission();
+      expect(log.last,
+          isMethodCall('requestExactAlarmsPermission', arguments: null));
     });
   });
 }

@@ -38,10 +38,13 @@ extension DarwinInitializationSettingsMapper on DarwinInitializationSettings {
         'requestAlertPermission': requestAlertPermission,
         'requestSoundPermission': requestSoundPermission,
         'requestBadgePermission': requestBadgePermission,
+        'requestProvisionalPermission': requestProvisionalPermission,
         'requestCriticalPermission': requestCriticalPermission,
         'defaultPresentAlert': defaultPresentAlert,
         'defaultPresentSound': defaultPresentSound,
         'defaultPresentBadge': defaultPresentBadge,
+        'defaultPresentBanner': defaultPresentBanner,
+        'defaultPresentList': defaultPresentList,
         'notificationCategories': notificationCategories
             .map((e) => e.toMap()) // ignore: always_specify_types
             .toList(),
@@ -50,11 +53,11 @@ extension DarwinInitializationSettingsMapper on DarwinInitializationSettings {
 
 extension on DarwinNotificationAttachmentThumbnailClippingRect {
   Map<String, Object> toMap() => <String, Object>{
-    'x': x,
-    'y': y,
-    'width': width,
-    'height': height,
-  };
+        'x': x,
+        'y': y,
+        'width': width,
+        'height': height,
+      };
 }
 
 extension DarwinNotificationAttachmentMapper on DarwinNotificationAttachment {
@@ -71,11 +74,13 @@ extension DarwinNotificationDetailsMapper on DarwinNotificationDetails {
         'presentAlert': presentAlert,
         'presentSound': presentSound,
         'presentBadge': presentBadge,
+        'presentBanner': presentBanner,
+        'presentList': presentList,
         'subtitle': subtitle,
         'sound': sound,
         'badgeNumber': badgeNumber,
         'threadIdentifier': threadIdentifier,
-        'interruptionLevel': interruptionLevel?.value,
+        'interruptionLevel': interruptionLevel?.index,
         'attachments': attachments
             ?.map((a) => a.toMap()) // ignore: always_specify_types
             .toList(),

@@ -1,11 +1,11 @@
 task:
   name: Build Android example app (stable channel)
   container:
-    image: cirrusci/flutter:stable
+    image: ghcr.io/cirruslabs/flutter:stable
   pub_cache:
     folder: ~/.pub-cache
   install_melos_script:
-    - dart pub global activate melos
+    - dart pub global activate melos 2.9.0
   build_script:
     - export PATH="$PATH":"$HOME/.pub-cache/bin"
     - melos bootstrap
@@ -18,7 +18,7 @@ task:
   pub_cache:
     folder: ~/.pub-cache
   install_melos_script:
-    - dart pub global activate melos
+    - dart pub global activate melos 2.9.0
   build_script:
     - export PATH="$PATH":"$HOME/.pub-cache/bin"
     - melos bootstrap
@@ -26,15 +26,15 @@ task:
 
 task:
   name: Build iOS example app (stable channel)
-  osx_instance:
-    image: monterey-xcode
+  macos_instance:
+    image: ghcr.io/cirruslabs/macos-ventura-xcode:14.2
   pub_cache:
     folder: ~/.pub-cache
   upgrade_script:
     - flutter channel stable
     - flutter upgrade
   install_melos_script:
-    - dart pub global activate melos
+    - dart pub global activate melos 2.9.0
   build_script:
     - export PATH="$PATH":"$HOME/.pub-cache/bin"
     - melos bootstrap
@@ -42,8 +42,8 @@ task:
 
 task:
   name: Build macOS example app (stable channel)
-  osx_instance:
-    image: monterey-xcode
+  macos_instance:
+    image: ghcr.io/cirruslabs/macos-ventura-xcode:14.2
   pub_cache:
     folder: ~/.pub-cache
   upgrade_script:
@@ -52,7 +52,7 @@ task:
   setup_script:
     - flutter config --enable-macos-desktop
   install_melos_script:
-    - dart pub global activate melos
+    - dart pub global activate melos 2.9.0
   build_script:
     - export PATH="$PATH":"$HOME/.pub-cache/bin"
     - melos bootstrap
@@ -69,7 +69,7 @@ task:
     - apt install cmake ninja-build clang pkg-config libgtk-3-dev -y
     - flutter config --enable-linux-desktop
   install_melos_script:
-    - dart pub global activate melos
+    - dart pub global activate melos 2.9.0
   build_script:
     - export PATH="$PATH":"$HOME/.pub-cache/bin"
     - melos bootstrap
@@ -78,7 +78,7 @@ task:
 task:
   name: Build Linux example app (stable channel)
   container:
-    image: cirrusci/flutter:stable
+    image: ghcr.io/cirruslabs/flutter:stable
   pub_cache:
     folder: ~/.pub-cache
   setup_script:
@@ -86,7 +86,7 @@ task:
     - apt install cmake ninja-build clang pkg-config libgtk-3-dev -y
     - flutter config --enable-linux-desktop
   install_melos_script:
-    - dart pub global activate melos
+    - dart pub global activate melos 2.9.0
   build_script:
     - export PATH="$PATH":"$HOME/.pub-cache/bin"
     - melos bootstrap
@@ -103,7 +103,7 @@ task:
     - apt install cmake ninja-build clang pkg-config libgtk-3-dev -y
     - flutter config --enable-linux-desktop
   install_melos_script:
-    - dart pub global activate melos
+    - dart pub global activate melos 2.9.0
   build_script:
     - export PATH="$PATH":"$HOME/.pub-cache/bin"
     - melos bootstrap
@@ -112,9 +112,9 @@ task:
 task:
   name: Run all unit tests (Dart)
   container:
-    image: cirrusci/flutter:stable
+    image: ghcr.io/cirruslabs/flutter:stable
   install_melos_script:
-    - dart pub global activate melos
+    - dart pub global activate melos 2.9.0
   test_script:
     - export PATH="$PATH":"$HOME/.pub-cache/bin"
     - melos bootstrap
@@ -123,9 +123,9 @@ task:
 task:
   name: Run all unit tests (Android)
   container:
-    image: cirrusci/flutter:stable
+    image: ghcr.io/cirruslabs/flutter:stable
   install_melos_script:
-    - dart pub global activate melos
+    - dart pub global activate melos 2.9.0
   test_script:
     - export PATH="$PATH":"$HOME/.pub-cache/bin"
     - melos bootstrap
@@ -137,15 +137,16 @@ task:
     EMULATOR_API_LEVEL: 28
     ANDROID_ABI: "default;x86"
   container:
-    image: cirrusci/flutter:stable
+    image: ghcr.io/cirruslabs/flutter:stable
     cpu: 4
     memory: 10G
     kvm: true
   pub_cache:
     folder: ~/.pub-cache
   install_melos_script:
-    - dart pub global activate melos
+    - dart pub global activate melos 2.9.0
   install_images_script: sdkmanager "system-images;android-$EMULATOR_API_LEVEL;$ANDROID_ABI"
+  install_emulator_script: sdkmanager emulator
   create_device_script:
     echo no | avdmanager create avd --force -n test -k "system-images;android-$EMULATOR_API_LEVEL;$ANDROID_ABI"
   start_emulator_background_script:
@@ -160,15 +161,15 @@ task:
     - melos run test:integration
 task:
   name: Run integration tests (iOS)
-  osx_instance:
-    image: monterey-xcode-13.3
+  macos_instance:
+    image: ghcr.io/cirruslabs/macos-ventura-xcode:14.2
   pub_cache:
     folder: ~/.pub-cache
   simulator_script:
     - xcrun simctl list devicetypes
     - xcrun simctl list runtimes
     # create simulator
-    - udid=$(xcrun simctl create "iPhone 13" com.apple.CoreSimulator.SimDeviceType.iPhone-13 com.apple.CoreSimulator.SimRuntime.iOS-15-4)
+    - udid=$(xcrun simctl create "iPhone 13" com.apple.CoreSimulator.SimDeviceType.iPhone-13 com.apple.CoreSimulator.SimRuntime.iOS-16-2)
     # boot simulator
     - xcrun simctl boot $udid
     # enable notifications permissions via AppleSimulatorUtils
@@ -179,7 +180,7 @@ task:
     - flutter channel stable
     - flutter upgrade
   install_melos_script:
-    - dart pub global activate melos
+    - dart pub global activate melos 2.9.0
   test_script:
     - export PATH="$PATH":"$HOME/.pub-cache/bin"
     - melos bootstrap
