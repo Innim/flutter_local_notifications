@@ -119,6 +119,7 @@ class AndroidNotificationDetails {
     this.groupAlertBehavior = GroupAlertBehavior.all,
     this.autoCancel = true,
     this.ongoing = false,
+    this.silent = false,
     this.color,
     this.largeIcon,
     this.onlyAlertOnce = false,
@@ -254,6 +255,9 @@ class AndroidNotificationDetails {
 
   /// Specifies if the notification will be "ongoing".
   final bool ongoing;
+
+  /// Specifies if the notification will be "silent".
+  final bool silent;
 
   /// Specifies the color.
   final Color? color;

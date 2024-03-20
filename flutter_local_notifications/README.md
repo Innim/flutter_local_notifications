@@ -5,6 +5,9 @@
 
 A cross platform plugin for displaying local notifications.
 
+>[!IMPORTANT] 
+> Given how both quickly both Flutter ecosystem and Android ecosystem evolves, the minimum Flutter SDK version will be bumped to make it easier to maintain the plugin. Note that official plugins already follow a similar approach e.g. have a minimum Flutter SDK version of 3.13. This is being called out as if this affects your applications (e.g. supported OS versions) then you may need to consider maintaining your own fork in the future
+
 This is fork of [flutter_local_notifications](https://github.com/MaikuB/flutter_local_notifications).
 
 ## New features
@@ -17,6 +20,7 @@ This is fork of [flutter_local_notifications](https://github.com/MaikuB/flutter_
 ### iOS
 
 * Method `setBadgeNumber()` to set counter value on the icon.
+
 
 ## Table of contents
 
@@ -108,6 +112,7 @@ This is fork of [flutter_local_notifications](https://github.com/MaikuB/flutter_
 * [Android] Ability to check if notifications are enabled
 * [iOS (all supported versions) & macOS 10.14+] Request notification permissions and customise the permissions being requested around displaying notifications
 * [iOS 10 or newer and macOS 10.14 or newer] Display notifications with attachments
+* [iOS and macOS 10.14 or newer] Ability to check if notifications are enabled with specific type check
 * [Linux] Ability to to use themed/Flutter Assets icons and sound
 * [Linux] Ability to to set the category
 * [Linux] Configuring the urgency
@@ -235,11 +240,11 @@ dependencies {
 
 More information and other proposed solutions can be found in [Flutter issue #110658](https://github.com/flutter/flutter/issues/110658).
 
-The plugin also requires that the `compileSdkVersion` in your application's Gradle file is set to 33:
+The plugin also requires that the `compileSdk` in your application's Gradle file is set to 34 at a minimum:
 
 ```gradle
 android {
-    compileSdkVersion 33
+    compileSdk 34
     ...
 }
 ```
@@ -248,7 +253,7 @@ android {
 
 Previously the plugin would specify all the permissions required all of the features that the plugin support in its own `AndroidManifest.xml` file so that developers wouldn't need to do this in their own app's `AndroidManifest.xml` file. Since version 16 onwards, the plugin will now only specify the bare minimum and these [`POST_NOTIFICATIONS`] (https://developer.android.com/reference/android/Manifest.permission#POST_NOTIFICATIONS) and [`VIBRATE`](https://developer.android.com/reference/android/Manifest.permission#VIBRATE) permissions.
 
-For apps that need the following functionality please the following in your app's `AndroidManifest.xml`
+For apps that need the following functionality please complete the following in your app's `AndroidManifest.xml`
 
 * To schedule notifications the following changes are needed
     * Specify the appropriate permissions between the `<manifest>` tags.
@@ -366,13 +371,13 @@ flutterLocalNotificationsPlugin.initialize(initializationSettings,
 ...
 
 void onDidReceiveLocalNotification(
-    int id, String title?, String? body, String? payload) async {
+    int id, String? title, String? body, String? payload) async {
   // display a dialog with the notification details, tap ok to go to another page
   showDialog(
     context: context,
     builder: (BuildContext context) => CupertinoAlertDialog(
-      title: Text(title),
-      content: Text(body),
+      title: Text(title??''),
+      content: Text(body??''),
       actions: [
         CupertinoDialogAction(
           isDefaultAction: true,
