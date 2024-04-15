@@ -207,6 +207,8 @@ public class FlutterLocalNotificationsPlugin
 
   static final int EXACT_ALARM_PERMISSION_REQUEST_CODE = 2;
 
+  static  final int NOTIFICATION_WINDOW_DEFAULT_LENGTH_IN_MILLIS = 60000;
+
   private PermissionRequestListener callback;
 
   private PermissionRequestProgress permissionRequestProgress = PermissionRequestProgress.None;
@@ -857,7 +859,11 @@ public class FlutterLocalNotificationsPlugin
       } else if (notificationDetails.scheduleMode.useAlarmClock()) {
         AlarmManagerCompat.setAlarmClock(alarmManager, epochMilli, pendingIntent, pendingIntent);
       } else {
-        alarmManager.set(AlarmManager.RTC_WAKEUP, epochMilli, pendingIntent);
+          if (VERSION.SDK_INT >= VERSION_CODES.KITKAT) {
+              alarmManager.setWindow(AlarmManager.RTC_WAKEUP, epochMilli, NOTIFICATION_WINDOW_DEFAULT_LENGTH_IN_MILLIS, pendingIntent);
+          } else {
+              alarmManager.set(AlarmManager.RTC_WAKEUP, epochMilli, pendingIntent);
+          }
       }
     }
   }
