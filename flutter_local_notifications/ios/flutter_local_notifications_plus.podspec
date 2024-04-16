@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
   s.description      = <<-DESC
 Flutter plugin for displaying local notifications.
                        DESC
-  s.homepage         = 'https://github.com/MaikuB/flutter_local_notifications/tree/master/flutter_local_notifications'
+  s.homepage         = 'https://github.com/Innim/flutter_local_notifications/tree/master/flutter_local_notifications'
   s.license          = { :type => 'BSD', :file => '../LICENSE' }
   s.author           = { 'Michael Bui' => 'michael@dexterx.dev' }
   s.source           = { :path => '.' }
