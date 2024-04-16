@@ -280,6 +280,7 @@ public class FlutterLocalNotificationsPlugin
             .setContentIntent(pendingIntent)
             .setPriority(notificationDetails.priority)
             .setOngoing(BooleanUtils.getValue(notificationDetails.ongoing))
+            .setSilent(BooleanUtils.getValue(notificationDetails.silent))
             .setOnlyAlertOnce(BooleanUtils.getValue(notificationDetails.onlyAlertOnce));
 
     Map<String, PendingIntent> actionIntents = new HashMap<>();
@@ -737,7 +738,7 @@ public class FlutterLocalNotificationsPlugin
     AlarmManager alarmManager = getAlarmManager(context);
     if (notificationDetails.scheduleMode == null) {
       // This is to account for notifications created in older versions prior to allowWhileIdle
-      // being added so the deserialiser.
+      // being added to the deserialiser.
       // Reference to old behaviour:
       // https://github.com/MaikuB/flutter_local_notifications/blob/4b723e750d1371206520b10a122a444c4bba7475/flutter_local_notifications/android/src/main/java/com/dexterous/flutterlocalnotifications/FlutterLocalNotificationsPlugin.java#L569C37-L569C37
       notificationDetails.scheduleMode = ScheduleMode.exactAllowWhileIdle;
@@ -823,7 +824,7 @@ public class FlutterLocalNotificationsPlugin
 
     if (notificationDetails.scheduleMode == null) {
       // This is to account for notifications created in older versions prior to allowWhileIdle
-      // being added so the deserialiser.
+      // being added to the deserialiser.
       // Reference to old behaviour:
       // https://github.com/MaikuB/flutter_local_notifications/blob/4b723e750d1371206520b10a122a444c4bba7475/flutter_local_notifications/android/src/main/java/com/dexterous/flutterlocalnotifications/FlutterLocalNotificationsPlugin.java#L642
       notificationDetails.scheduleMode = ScheduleMode.inexact;
@@ -847,6 +848,15 @@ public class FlutterLocalNotificationsPlugin
       AlarmManager alarmManager,
       long epochMilli,
       PendingIntent pendingIntent) {
+
+    if (notificationDetails.scheduleMode == null) {
+      // This is to account for notifications created in older versions prior to allowWhileIdle
+      // being added to the deserialiser.
+      // Reference to old behaviour:
+      // https://github.com/MaikuB/flutter_local_notifications/blob/4b723e750d1371206520b10a122a444c4bba7475/flutter_local_notifications/android/src/main/java/com/dexterous/flutterlocalnotifications/FlutterLocalNotificationsPlugin.java#L515
+      notificationDetails.scheduleMode = ScheduleMode.exact;
+    }
+
     if (notificationDetails.scheduleMode.useAllowWhileIdle()) {
       setupAllowWhileIdleAlarm(notificationDetails, alarmManager, epochMilli, pendingIntent);
     } else {
@@ -855,6 +865,7 @@ public class FlutterLocalNotificationsPlugin
         AlarmManagerCompat.setExact(
             alarmManager, AlarmManager.RTC_WAKEUP, epochMilli, pendingIntent);
       } else if (notificationDetails.scheduleMode.useAlarmClock()) {
+        checkCanScheduleExactAlarms(alarmManager);
         AlarmManagerCompat.setAlarmClock(alarmManager, epochMilli, pendingIntent, pendingIntent);
       } else {
         if (notificationDetails.inexactWindowLengthMillis != 0
@@ -881,6 +892,7 @@ public class FlutterLocalNotificationsPlugin
       AlarmManagerCompat.setExactAndAllowWhileIdle(
           alarmManager, AlarmManager.RTC_WAKEUP, epochMilli, pendingIntent);
     } else if (notificationDetails.scheduleMode.useAlarmClock()) {
+      checkCanScheduleExactAlarms(alarmManager);
       AlarmManagerCompat.setAlarmClock(alarmManager, epochMilli, pendingIntent, pendingIntent);
     } else {
       AlarmManagerCompat.setAndAllowWhileIdle(
@@ -1683,7 +1695,10 @@ public class FlutterLocalNotificationsPlugin
       }
       result.success(activeNotificationsPayload);
     } catch (Throwable e) {
-      result.error(UNSUPPORTED_OS_VERSION_ERROR_CODE, e.getMessage(), e.getStackTrace());
+      result.error(
+          UNSUPPORTED_OS_VERSION_ERROR_CODE,
+          e.getMessage(),
+          android.util.Log.getStackTraceString(e));
     }
   }
 
@@ -2110,7 +2125,9 @@ public class FlutterLocalNotificationsPlugin
       result.success(stylePayload);
     } catch (Throwable e) {
       result.error(
-          GET_ACTIVE_NOTIFICATION_MESSAGING_STYLE_ERROR_CODE, e.getMessage(), e.getStackTrace());
+          GET_ACTIVE_NOTIFICATION_MESSAGING_STYLE_ERROR_CODE,
+          e.getMessage(),
+          android.util.Log.getStackTraceString(e));
     }
   }
 
@@ -2171,7 +2188,10 @@ public class FlutterLocalNotificationsPlugin
       }
       result.success(channelsPayload);
     } catch (Throwable e) {
-      result.error(GET_NOTIFICATION_CHANNELS_ERROR_CODE, e.getMessage(), e.getStackTrace());
+      result.error(
+          GET_NOTIFICATION_CHANNELS_ERROR_CODE,
+          e.getMessage(),
+          android.util.Log.getStackTraceString(e));
     }
   }
 
