@@ -1,6 +1,7 @@
 # [16.1.1]
 
-* [Android] Use setWindow() instead of set() for inexact alarms. 
+* [Android] Added `inexactWindowLengthMillis` param to `NotificationDetails` to use setWindow() instead
+of set() method for inexact alarms. 
 
 # [16.1.0]
 

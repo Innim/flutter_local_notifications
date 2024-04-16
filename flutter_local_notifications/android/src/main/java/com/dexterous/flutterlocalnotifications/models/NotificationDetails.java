@@ -129,6 +129,7 @@ public class NotificationDetails implements Serializable {
   private static final String CUSTOM_LAYOUT_LEGACY_NAME = "customLayoutLegacyName";
   private static final String CUSTOM_LAYOUT_COLLAPSED_NAME = "customLayoutCollapsedName";
   private static final String CUSTOM_LAYOUT_EXPANDED_NAME = "customLayoutExpandedName";
+  private static final String INEXACT_WINDOW_LENGTH_MILLIS = "inexactWindowLengthMillis";
 
   public Integer id;
   public String title;
@@ -203,6 +204,7 @@ public class NotificationDetails implements Serializable {
   // Note: this is set on the Android to save details about the icon that should be used when
   // re-hydrating scheduled notifications when a device has been restarted.
   public Integer iconResourceId;
+  public Long inexactWindowLengthMillis;
 
   public static NotificationDetails from(Map<String, Object> arguments) {
     NotificationDetails notificationDetails = new NotificationDetails();
@@ -238,6 +240,12 @@ public class NotificationDetails implements Serializable {
     }
     if (arguments.containsKey(DAY)) {
       notificationDetails.day = (Integer) arguments.get(DAY);
+    }
+
+    if(arguments.containsKey(INEXACT_WINDOW_LENGTH_MILLIS)) {
+      notificationDetails.inexactWindowLengthMillis = (Long) arguments.get(INEXACT_WINDOW_LENGTH_MILLIS);
+    } else {
+      notificationDetails.inexactWindowLengthMillis = Long.decode("0");
     }
 
     readPlatformSpecifics(arguments, notificationDetails);
