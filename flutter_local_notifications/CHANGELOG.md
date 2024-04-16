@@ -1,3 +1,7 @@
+# [16.1.1]
+
+* [Android] Use setWindow() instead of set() for inexact alarms. 
+
 # [16.1.0]
 
 * [Android] calling the `requestExactAlarmsPermission()` method will now go directly to the alarm settings screen specific to the app instead the general alarm settings screen where users needed to pick the app they wanted to change the settings for. Thanks to the PR from [ShunMc](https://github.com/ShunMc)
