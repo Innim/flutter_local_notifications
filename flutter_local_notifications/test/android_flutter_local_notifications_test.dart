@@ -92,7 +92,7 @@ void main() {
             showsUserInterface: true,
             allowGeneratedReplies: true,
             cancelNotification: false,
-            customViewId: 'action_1'
+            customViewId: 'action_1',
           ),
           AndroidNotificationAction(
             'action2',
@@ -105,8 +105,8 @@ void main() {
                 allowedMimeTypes: <String>{'text/plain'},
               ),
             ],
-            customViewId: 'action_2'
-          )
+            customViewId: 'action_2',
+          ),
         ],
       );
 
@@ -757,6 +757,9 @@ void main() {
               'colorized': false,
               'number': null,
               'audioAttributesUsage': 5,
+              'customLayoutLegacyName': null,
+              'customLayoutCollapsedName': null,
+              'customLayoutExpandedName': null,
             },
           }));
     });

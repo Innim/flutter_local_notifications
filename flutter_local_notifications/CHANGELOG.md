@@ -1,3 +1,8 @@
+# [17.0.1]
+
+* [Android] Added `inexactWindowLengthMillis` param to `NotificationDetails` to use setWindow() instead
+of set() method for inexact alarms. 
+
 # [17.0.0]
 
 * [Android] **Breaking change** bumped `compileSdk` to 34 and updated readme to mention this
