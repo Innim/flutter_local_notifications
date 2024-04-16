@@ -84,23 +84,29 @@ void main() {
         'channelName',
         channelDescription: 'channelDescription',
         actions: <AndroidNotificationAction>[
-          AndroidNotificationAction('action1', 'Action 1',
-              titleColor: Color.fromARGB(255, 0, 127, 16),
-              contextual: true,
-              showsUserInterface: true,
-              allowGeneratedReplies: true,
-              cancelNotification: false,
-              customViewId: 'action_1'),
-          AndroidNotificationAction('action2', 'Action 2',
-              titleColor: Color.fromARGB(255, 0, 127, 16),
-              inputs: <AndroidNotificationActionInput>[
-                AndroidNotificationActionInput(
-                  choices: <String>['choice1', 'choice2'],
-                  label: 'Select something',
-                  allowedMimeTypes: <String>{'text/plain'},
-                ),
-              ],
-              customViewId: 'action_2')
+          AndroidNotificationAction(
+            'action1',
+            'Action 1',
+            titleColor: Color.fromARGB(255, 0, 127, 16),
+            contextual: true,
+            showsUserInterface: true,
+            allowGeneratedReplies: true,
+            cancelNotification: false,
+            customViewId: 'action_1',
+          ),
+          AndroidNotificationAction(
+            'action2',
+            'Action 2',
+            titleColor: Color.fromARGB(255, 0, 127, 16),
+            inputs: <AndroidNotificationActionInput>[
+              AndroidNotificationActionInput(
+                choices: <String>['choice1', 'choice2'],
+                label: 'Select something',
+                allowedMimeTypes: <String>{'text/plain'},
+              ),
+            ],
+            customViewId: 'action_2',
+          ),
         ],
       );
 
