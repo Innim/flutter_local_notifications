@@ -451,7 +451,7 @@ class AndroidNotificationDetails {
   final String? customLayoutExpandedName;
 
   /// Length of notification window for inexact alarm in millis, if not null or
-  /// zero, inexact alarm will plan in this length, should be 10 minutes or more,
-  /// see more in docs https://developer.android.com/about/versions/14/changes/schedule-exact-alarms#use-cases
+  /// zero, inexact alarm will plan in this length, should be 10 minutes
+  /// or more, see more in docs https://developer.android.com/about/versions/14/changes/schedule-exact-alarms#use-cases
   final int? inexactWindowLengthMillis;
 }
