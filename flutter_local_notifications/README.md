@@ -13,6 +13,7 @@ This is fork of [flutter_local_notifications](https://github.com/MaikuB/flutter_
 
 * Ability to set your own custom layout for notifications.
 * More detailed exceptions in `ScheduledNotificationReceiver.onReceive()`.
+* Ability to set notification window for inexact alarm. See `AndroidNotificationDetails.inexactWindowLengthMillis`
 
 ### iOS
 

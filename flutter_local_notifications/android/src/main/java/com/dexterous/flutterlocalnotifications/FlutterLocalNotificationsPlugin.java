@@ -207,8 +207,6 @@ public class FlutterLocalNotificationsPlugin
 
   static final int EXACT_ALARM_PERMISSION_REQUEST_CODE = 2;
 
-  static final int NOTIFICATION_WINDOW_DEFAULT_LENGTH_IN_MILLIS = 60000;
-
   private PermissionRequestListener callback;
 
   private PermissionRequestProgress permissionRequestProgress = PermissionRequestProgress.None;
