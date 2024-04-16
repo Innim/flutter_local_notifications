@@ -857,11 +857,16 @@ public class FlutterLocalNotificationsPlugin
       } else if (notificationDetails.scheduleMode.useAlarmClock()) {
         AlarmManagerCompat.setAlarmClock(alarmManager, epochMilli, pendingIntent, pendingIntent);
       } else {
-          if (notificationDetails.inexactWindowLengthMillis != 0 && VERSION.SDK_INT >= VERSION_CODES.KITKAT) {
-              alarmManager.setWindow(AlarmManager.RTC_WAKEUP, epochMilli, notificationDetails.inexactWindowLengthMillis, pendingIntent);
-          } else {
-              alarmManager.set(AlarmManager.RTC_WAKEUP, epochMilli, pendingIntent);
-          }
+        if (notificationDetails.inexactWindowLengthMillis != 0
+            && VERSION.SDK_INT >= VERSION_CODES.KITKAT) {
+          alarmManager.setWindow(
+              AlarmManager.RTC_WAKEUP,
+              epochMilli,
+              notificationDetails.inexactWindowLengthMillis,
+              pendingIntent);
+        } else {
+          alarmManager.set(AlarmManager.RTC_WAKEUP, epochMilli, pendingIntent);
+        }
       }
     }
   }

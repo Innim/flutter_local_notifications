@@ -242,8 +242,9 @@ public class NotificationDetails implements Serializable {
       notificationDetails.day = (Integer) arguments.get(DAY);
     }
 
-    if(arguments.containsKey(INEXACT_WINDOW_LENGTH_MILLIS)) {
-      notificationDetails.inexactWindowLengthMillis = (Long) arguments.get(INEXACT_WINDOW_LENGTH_MILLIS);
+    if (arguments.containsKey(INEXACT_WINDOW_LENGTH_MILLIS)) {
+      notificationDetails.inexactWindowLengthMillis =
+          (Long) arguments.get(INEXACT_WINDOW_LENGTH_MILLIS);
     } else {
       notificationDetails.inexactWindowLengthMillis = Long.decode("0");
     }
