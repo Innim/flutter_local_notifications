@@ -84,29 +84,23 @@ void main() {
         'channelName',
         channelDescription: 'channelDescription',
         actions: <AndroidNotificationAction>[
-          AndroidNotificationAction(
-            'action1',
-            'Action 1',
-            titleColor: Color.fromARGB(255, 0, 127, 16),
-            contextual: true,
-            showsUserInterface: true,
-            allowGeneratedReplies: true,
-            cancelNotification: false,
-            customViewId: 'action_1'
-          ),
-          AndroidNotificationAction(
-            'action2',
-            'Action 2',
-            titleColor: Color.fromARGB(255, 0, 127, 16),
-            inputs: <AndroidNotificationActionInput>[
-              AndroidNotificationActionInput(
-                choices: <String>['choice1', 'choice2'],
-                label: 'Select something',
-                allowedMimeTypes: <String>{'text/plain'},
-              ),
-            ],
-            customViewId: 'action_2'
-          )
+          AndroidNotificationAction('action1', 'Action 1',
+              titleColor: Color.fromARGB(255, 0, 127, 16),
+              contextual: true,
+              showsUserInterface: true,
+              allowGeneratedReplies: true,
+              cancelNotification: false,
+              customViewId: 'action_1'),
+          AndroidNotificationAction('action2', 'Action 2',
+              titleColor: Color.fromARGB(255, 0, 127, 16),
+              inputs: <AndroidNotificationActionInput>[
+                AndroidNotificationActionInput(
+                  choices: <String>['choice1', 'choice2'],
+                  label: 'Select something',
+                  allowedMimeTypes: <String>{'text/plain'},
+                ),
+              ],
+              customViewId: 'action_2')
         ],
       );
 
@@ -710,8 +704,6 @@ void main() {
               'importance': Importance.defaultImportance.value,
               'priority': Priority.defaultPriority.value,
               'playSound': true,
-              'sound': 'uri',
-              'soundSource': AndroidNotificationSoundSource.uri.index,
               'enableVibration': true,
               'vibrationPattern': null,
               'groupKey': null,
@@ -744,19 +736,24 @@ void main() {
               'visibility': null,
               'timeoutAfter': null,
               'category': null,
-              'additionalFlags': null,
               'fullScreenIntent': false,
               'shortcutId': null,
+              'additionalFlags': null,
+              'customLayoutLegacyName': null,
+              'customLayoutCollapsedName': null,
+              'customLayoutExpandedName': null,
               'subText': null,
+              'tag': null,
+              'colorized': false,
+              'number': null,
+              'audioAttributesUsage': 5,
               'style': AndroidNotificationStyle.defaultStyle.index,
               'styleInformation': <String, Object>{
                 'htmlFormatContent': false,
                 'htmlFormatTitle': false,
               },
-              'tag': null,
-              'colorized': false,
-              'number': null,
-              'audioAttributesUsage': 5,
+              'sound': 'uri',
+              'soundSource': AndroidNotificationSoundSource.uri.index,
             },
           }));
     });
