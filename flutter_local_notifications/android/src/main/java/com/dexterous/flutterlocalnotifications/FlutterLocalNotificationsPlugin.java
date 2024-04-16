@@ -868,7 +868,7 @@ public class FlutterLocalNotificationsPlugin
         checkCanScheduleExactAlarms(alarmManager);
         AlarmManagerCompat.setAlarmClock(alarmManager, epochMilli, pendingIntent, pendingIntent);
       } else {
-        if (notificationDetails.inexactWindowLengthMillis != 0
+        if (notificationDetails.inexactWindowLengthMillis > 0L
             && VERSION.SDK_INT >= VERSION_CODES.KITKAT) {
           alarmManager.setWindow(
               AlarmManager.RTC_WAKEUP,

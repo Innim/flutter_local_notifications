@@ -248,7 +248,7 @@ public class NotificationDetails implements Serializable {
       notificationDetails.inexactWindowLengthMillis =
           (Long) arguments.get(INEXACT_WINDOW_LENGTH_MILLIS);
     } else {
-      notificationDetails.inexactWindowLengthMillis = Long.decode("0");
+      notificationDetails.inexactWindowLengthMillis = 0L;
     }
 
     readPlatformSpecifics(arguments, notificationDetails);
