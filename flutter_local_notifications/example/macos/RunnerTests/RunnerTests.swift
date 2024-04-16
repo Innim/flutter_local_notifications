@@ -2,7 +2,7 @@ import FlutterMacOS
 import Cocoa
 import XCTest
 
-@testable import flutter_local_notifications
+@testable import flutter_local_notifications_plus
 
 // This demonstrates a simple unit test of the Swift portion of this plugin's implementation.
 //
