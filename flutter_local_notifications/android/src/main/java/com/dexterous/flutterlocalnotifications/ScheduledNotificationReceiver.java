@@ -93,7 +93,10 @@ public class ScheduledNotificationReceiver extends BroadcastReceiver {
     if (bundle != null) {
       sb.append("{\n");
       for (String key : bundle.keySet()) {
-        sb.append("\t").append(key).append(" : ").append(bundle.get(key) != null ? bundle.get(key) : "NULL");
+        sb.append("\t")
+            .append(key)
+            .append(" : ")
+            .append(bundle.get(key) != null ? bundle.get(key) : "NULL");
         sb.append("\n");
       }
       sb.append("}");
@@ -117,5 +120,4 @@ public class ScheduledNotificationReceiver extends BroadcastReceiver {
 
     throw new RuntimeException(msg.toString());
   }
-
 }
