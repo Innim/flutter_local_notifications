@@ -18,6 +18,8 @@ import com.google.gson.reflect.TypeToken;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.Type;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /** Created by michaelbui on 24/3/18. */
 @Keep
@@ -64,6 +66,18 @@ public class ScheduledNotificationReceiver extends BroadcastReceiver {
 
       if (notificationDetails == null) {
         fault("NotificationDetails is null - gson.fromJson can't parse it.", intent);
+        return;
+      }
+
+      DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+
+      LocalDateTime scheduledDateTime = LocalDateTime.parse(notificationDetails.scheduledDateTime, formatter);
+
+      LocalDateTime currentDateTime = LocalDateTime.now();
+
+      if (scheduledDateTime.isBefore(currentDateTime.minusYears(1))) {
+        FlutterLocalNotificationsPlugin.removeNotificationFromCache(context, notificationDetails.id);
+        fault("Wrong notification! Date older than a year.", intent);
         return;
       }
 
