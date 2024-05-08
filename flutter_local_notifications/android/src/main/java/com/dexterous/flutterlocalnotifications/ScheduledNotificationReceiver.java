@@ -87,7 +87,8 @@ public class ScheduledNotificationReceiver extends BroadcastReceiver {
     fault(message, null, intent, null);
   }
 
-  private void fault(String message, Exception e, Intent intent, NotificationDetails notificationDetails) {
+  private void fault(
+      String message, Exception e, Intent intent, NotificationDetails notificationDetails) {
     Bundle bundle = intent.getExtras();
     StringBuilder sb = new StringBuilder();
 
@@ -112,7 +113,10 @@ public class ScheduledNotificationReceiver extends BroadcastReceiver {
       writeData(sb, "playSound", notificationDetails.playSound);
       writeData(sb, "silent", notificationDetails.silent);
       writeData(sb, "timeZoneName", notificationDetails.timeZoneName);
-      writeData(sb, "scheduledNotificationRepeatFrequency", notificationDetails.scheduledNotificationRepeatFrequency);
+      writeData(
+          sb,
+          "scheduledNotificationRepeatFrequency",
+          notificationDetails.scheduledNotificationRepeatFrequency);
       writeData(sb, "repeatTime", notificationDetails.repeatTime);
       writeData(sb, "day", notificationDetails.day);
       writeData(sb, "when", notificationDetails.when);
@@ -127,8 +131,7 @@ public class ScheduledNotificationReceiver extends BroadcastReceiver {
       writeData(sb, "customLayoutCollapsedName", notificationDetails.customLayoutCollapsedName);
       writeData(sb, "iconResourceId", notificationDetails.iconResourceId);
       sb.append("}\n");
-    }
-    else if (bundle != null) {
+    } else if (bundle != null) {
       sb.append("{\n");
       for (String key : bundle.keySet()) {
         sb.append("\t")
@@ -160,9 +163,6 @@ public class ScheduledNotificationReceiver extends BroadcastReceiver {
   }
 
   private void writeData(StringBuilder sb, String fieldName, Object data) {
-    sb.append(fieldName)
-            .append(" : ")
-            .append(data)
-            .append("\n");
+    sb.append(fieldName).append(" : ").append(data).append("\n");
   }
 }
