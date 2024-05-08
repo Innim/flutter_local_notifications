@@ -70,27 +70,65 @@ public class ScheduledNotificationReceiver extends BroadcastReceiver {
       try {
         FlutterLocalNotificationsPlugin.showNotification(context, notificationDetails);
       } catch (Exception e) {
-        fault("Exception while showing notification.", e, intent);
+        fault("Exception while showing notification.", e, intent, notificationDetails);
         return;
       }
 
       try {
         FlutterLocalNotificationsPlugin.scheduleNextNotification(context, notificationDetails);
       } catch (Exception e) {
-        fault("Exception while preparing next notification.", e, intent);
+        fault("Exception while preparing next notification.", e, intent, notificationDetails);
         return;
       }
     }
   }
 
   private void fault(String message, Intent intent) {
-    fault(message, null, intent);
+    fault(message, null, intent, null);
   }
 
-  private void fault(String message, Exception e, Intent intent) {
+  private void fault(String message, Exception e, Intent intent, NotificationDetails notificationDetails) {
     Bundle bundle = intent.getExtras();
     StringBuilder sb = new StringBuilder();
-    if (bundle != null) {
+
+    if (notificationDetails != null) {
+      sb.append("{\n");
+      writeData(sb, "id", notificationDetails.id);
+      writeData(sb, "number", notificationDetails.number);
+      writeData(sb, "importance", notificationDetails.importance);
+      writeData(sb, "priority", notificationDetails.priority);
+      writeData(sb, "title", notificationDetails.title);
+      writeData(sb, "body", notificationDetails.body);
+      writeData(sb, "subText", notificationDetails.subText);
+      writeData(sb, "payload", notificationDetails.payload);
+      writeData(sb, "category", notificationDetails.category);
+      writeData(sb, "tag", notificationDetails.tag);
+      writeData(sb, "icon", notificationDetails.icon);
+      writeData(sb, "style", notificationDetails.style);
+      writeData(sb, "styleInformation", notificationDetails.styleInformation);
+      writeData(sb, "channelId", notificationDetails.channelId);
+      writeData(sb, "channelName", notificationDetails.channelName);
+      writeData(sb, "channelDescription", notificationDetails.channelDescription);
+      writeData(sb, "playSound", notificationDetails.playSound);
+      writeData(sb, "silent", notificationDetails.silent);
+      writeData(sb, "timeZoneName", notificationDetails.timeZoneName);
+      writeData(sb, "scheduledNotificationRepeatFrequency", notificationDetails.scheduledNotificationRepeatFrequency);
+      writeData(sb, "repeatTime", notificationDetails.repeatTime);
+      writeData(sb, "day", notificationDetails.day);
+      writeData(sb, "when", notificationDetails.when);
+      writeData(sb, "showWhen", notificationDetails.showWhen);
+      writeData(sb, "scheduledDateTime", notificationDetails.scheduledDateTime);
+      writeData(sb, "inexactWindowLengthMillis", notificationDetails.inexactWindowLengthMillis);
+      writeData(sb, "groupKey", notificationDetails.groupKey);
+      writeData(sb, "setAsGroupSummary", notificationDetails.setAsGroupSummary);
+      writeData(sb, "groupAlertBehavior", notificationDetails.groupAlertBehavior);
+      writeData(sb, "autoCancel", notificationDetails.autoCancel);
+      writeData(sb, "customLayoutLegacyName", notificationDetails.customLayoutLegacyName);
+      writeData(sb, "customLayoutCollapsedName", notificationDetails.customLayoutCollapsedName);
+      writeData(sb, "iconResourceId", notificationDetails.iconResourceId);
+      sb.append("}\n");
+    }
+    else if (bundle != null) {
       sb.append("{\n");
       for (String key : bundle.keySet()) {
         sb.append("\t")
@@ -109,7 +147,7 @@ public class ScheduledNotificationReceiver extends BroadcastReceiver {
     if (e != null) {
       msg.append("Exception: ").append(e).append("\n");
     }
-    msg.append("Intent extras: ");
+    msg.append(notificationDetails != null ? "NotificationDetails: " : "Intent extras: ");
     msg.append(sb);
 
     if (e != null) {
@@ -119,5 +157,12 @@ public class ScheduledNotificationReceiver extends BroadcastReceiver {
     }
 
     throw new RuntimeException(msg.toString());
+  }
+
+  private void writeData(StringBuilder sb, String fieldName, Object data) {
+    sb.append(fieldName)
+            .append(" : ")
+            .append(data)
+            .append("\n");
   }
 }
