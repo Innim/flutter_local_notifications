@@ -69,22 +69,23 @@ public class ScheduledNotificationReceiver extends BroadcastReceiver {
         return;
       }
 
-      DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
-
-      LocalDateTime scheduledDateTime = LocalDateTime.parse(notificationDetails.scheduledDateTime, formatter);
-
-      LocalDateTime currentDateTime = LocalDateTime.now();
-
-      if (scheduledDateTime.isBefore(currentDateTime.minusYears(1))) {
-        FlutterLocalNotificationsPlugin.removeNotificationFromCache(context, notificationDetails.id);
-        fault("Wrong notification! Date older than a year.", intent);
-        return;
-      }
-
       try {
         FlutterLocalNotificationsPlugin.showNotification(context, notificationDetails);
       } catch (Exception e) {
-        fault("Exception while showing notification.", e, intent);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+
+        LocalDateTime scheduledDateTime = LocalDateTime.parse(notificationDetails.scheduledDateTime, formatter);
+
+        LocalDateTime currentDateTime = LocalDateTime.now();
+
+        if (scheduledDateTime.isBefore(currentDateTime.minusYears(1))) {
+          FlutterLocalNotificationsPlugin.removeNotificationFromCache(context, notificationDetails.id);
+          fault("Wrong notification! Date older than a year.", intent);
+        } else {
+
+          fault("Exception while showing notification.", e, intent);
+        }
         return;
       }
 
