@@ -75,12 +75,14 @@ public class ScheduledNotificationReceiver extends BroadcastReceiver {
 
         DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
-        LocalDateTime scheduledDateTime = LocalDateTime.parse(notificationDetails.scheduledDateTime, formatter);
+        LocalDateTime scheduledDateTime =
+          LocalDateTime.parse(notificationDetails.scheduledDateTime, formatter);
 
         LocalDateTime currentDateTime = LocalDateTime.now();
 
         if (scheduledDateTime.isBefore(currentDateTime.minusYears(1))) {
-          FlutterLocalNotificationsPlugin.removeNotificationFromCache(context, notificationDetails.id);
+          FlutterLocalNotificationsPlugin.removeNotificationFromCache(
+            context, notificationDetails.id);
           fault("Wrong notification! Date older than a year.", intent);
         } else {
 
