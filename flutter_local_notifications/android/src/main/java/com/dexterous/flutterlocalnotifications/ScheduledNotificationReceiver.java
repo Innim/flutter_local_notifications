@@ -80,12 +80,15 @@ public class ScheduledNotificationReceiver extends BroadcastReceiver {
 
         LocalDateTime currentDateTime = LocalDateTime.now();
 
+        // TODO: временное решение, удалить как все починим!
+        // Проблема: у части давних пользователей остались очень древние оповещения,
+        // которые планировались по старому методу, который сейчас вызывает ошибку при показе.
+        // Если мы ловим ошибку при показе именно такого старого оповещения, то отменяем его.
         if (scheduledDateTime.isBefore(currentDateTime.minusYears(1))) {
-          FlutterLocalNotificationsPlugin.removeNotificationFromCache(
-              context, notificationDetails.id);
+          FlutterLocalNotificationsPlugin.cancelByNotificationDetails(
+              context, notificationDetails);
           fault("Wrong notification! Date older than a year.", intent);
         } else {
-
           fault("Exception while showing notification.", e, intent);
         }
         return;

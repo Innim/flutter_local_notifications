@@ -1900,6 +1900,24 @@ public class FlutterLocalNotificationsPlugin
     removeNotificationFromCache(applicationContext, id);
   }
 
+  // TODO: временное решение, удалить метод как пофиксим проблемы с оповещениями.
+  static public void cancelByNotificationDetails(Context context, NotificationDetails notificationDetails) {
+    Integer id = notificationDetails.id;
+    String tag = notificationDetails.tag;
+
+    Intent intent = new Intent(context, ScheduledNotificationReceiver.class);
+    PendingIntent pendingIntent = getBroadcastPendingIntent(context, id, intent);
+    AlarmManager alarmManager = getAlarmManager(context);
+    alarmManager.cancel(pendingIntent);
+    NotificationManagerCompat notificationManager = getNotificationManager(context);
+    if (tag == null) {
+      notificationManager.cancel(id);
+    } else {
+      notificationManager.cancel(tag, id);
+    }
+    removeNotificationFromCache(context, id);
+  }
+
   private void cancelAllNotifications(Result result) {
     NotificationManagerCompat notificationManager = getNotificationManager(applicationContext);
     notificationManager.cancelAll();
