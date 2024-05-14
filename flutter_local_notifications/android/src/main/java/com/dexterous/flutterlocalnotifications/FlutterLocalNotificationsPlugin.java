@@ -1901,7 +1901,8 @@ public class FlutterLocalNotificationsPlugin
   }
 
   // TODO: временное решение, удалить метод как пофиксим проблемы с оповещениями.
-  static public void cancelByNotificationDetails(Context context, NotificationDetails notificationDetails) {
+  public static void cancelByNotificationDetails(
+      Context context, NotificationDetails notificationDetails) {
     Integer id = notificationDetails.id;
     String tag = notificationDetails.tag;
 
