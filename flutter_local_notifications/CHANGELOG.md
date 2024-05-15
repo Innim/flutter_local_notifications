@@ -1,6 +1,7 @@
 # [17.0.2]
 
-* [Android] More detailed exceptions in `ScheduledNotificationReceiver.onReceive()`.
+* [Android] Remove old corrupted notifications.
+* [Android] More detailed exceptions in `ScheduledNotificationReceiver.onReceive()`. 
 
 # [17.0.1]
 
