@@ -1,3 +1,8 @@
+# [17.0.2]
+
+* [Android] Remove old corrupted notifications.
+* [Android] More detailed exceptions in `ScheduledNotificationReceiver.onReceive()`. 
+
 # [17.0.1]
 
 * [Android] Added `inexactWindowLengthMillis` param to `NotificationDetails` to use setWindow() instead
