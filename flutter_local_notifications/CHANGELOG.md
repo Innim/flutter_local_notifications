@@ -1,3 +1,7 @@
+# [17.0.2+1]
+
+* [Android] Use setWindow() for whileIdle alarm to.
+
 # [17.0.2]
 
 * [Android] Remove old corrupted notifications.
