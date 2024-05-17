@@ -896,15 +896,15 @@ public class FlutterLocalNotificationsPlugin
       AlarmManagerCompat.setAlarmClock(alarmManager, epochMilli, pendingIntent, pendingIntent);
     } else {
       if (notificationDetails.inexactWindowLengthMillis > 0L
-              && VERSION.SDK_INT >= VERSION_CODES.KITKAT) {
+          && VERSION.SDK_INT >= VERSION_CODES.KITKAT) {
         alarmManager.setWindow(
-                AlarmManager.RTC_WAKEUP,
-                epochMilli,
-                notificationDetails.inexactWindowLengthMillis,
-                pendingIntent);
+            AlarmManager.RTC_WAKEUP,
+            epochMilli,
+            notificationDetails.inexactWindowLengthMillis,
+            pendingIntent);
       } else {
         AlarmManagerCompat.setAndAllowWhileIdle(
-                alarmManager, AlarmManager.RTC_WAKEUP, epochMilli, pendingIntent);
+            alarmManager, AlarmManager.RTC_WAKEUP, epochMilli, pendingIntent);
       }
     }
   }
