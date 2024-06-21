@@ -25,11 +25,14 @@ import java.time.format.DateTimeFormatter;
 @Keep
 public class ScheduledNotificationReceiver extends BroadcastReceiver {
 
+  private ShownNotificationsPreferences preferences;
   private static final String TAG = "ScheduledNotifReceiver";
 
   @Override
   @SuppressWarnings("deprecation")
   public void onReceive(final Context context, Intent intent) {
+    preferences = preferences == null ? new ShownNotificationsPreferences(context) : preferences;
+
     String notificationDetailsJson =
         intent.getStringExtra(FlutterLocalNotificationsPlugin.NOTIFICATION_DETAILS);
     if (StringUtils.isNullOrEmpty(notificationDetailsJson)) {
@@ -91,6 +94,11 @@ public class ScheduledNotificationReceiver extends BroadcastReceiver {
           fault("Exception while showing notification.", e, intent);
         }
         return;
+      }
+
+      final String info = notificationDetails.shownNotificationsInfo;
+      if(!StringUtils.isNullOrEmpty(info)) {
+        preferences.saveShownNotificationInfo(info);
       }
 
       try {

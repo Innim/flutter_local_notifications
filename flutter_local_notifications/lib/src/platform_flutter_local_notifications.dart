@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:ui';
 
 import 'package:clock/clock.dart';
@@ -107,7 +108,7 @@ class MethodChannelFlutterLocalNotificationsPlugin
 /// Android implementation of the local notifications plugin.
 class AndroidFlutterLocalNotificationsPlugin
     extends MethodChannelFlutterLocalNotificationsPlugin {
-  DidReceiveNotificationResponseCallback? _ondidReceiveNotificationResponse;
+  DidReceiveNotificationResponseCallback? _onDidReceiveNotificationResponse;
 
   /// Initializes the plugin.
   ///
@@ -131,7 +132,7 @@ class AndroidFlutterLocalNotificationsPlugin
     DidReceiveBackgroundNotificationResponseCallback?
         onDidReceiveBackgroundNotificationResponse,
   }) async {
-    _ondidReceiveNotificationResponse = onDidReceiveNotificationResponse;
+    _onDidReceiveNotificationResponse = onDidReceiveNotificationResponse;
     _channel.setMethodCallHandler(_handleMethod);
 
     final Map<String, Object> arguments = initializationSettings.toMap();
@@ -513,6 +514,27 @@ class AndroidFlutterLocalNotificationsPlugin
   Future<bool?> canScheduleExactNotifications() async =>
       await _channel.invokeMethod<bool>('canScheduleExactNotifications');
 
+  /// Returns info that stored when notifications was shown.
+  /// See [AndroidNotificationDetails.shownNotificationsInfo]
+  Future<List<Map<String, dynamic>>> getShownNotificationsInfo() async {
+    final List<Object?>? res =
+        await _channel.invokeMethod<List<Object?>>('getShownNotificationsInfo');
+    if (res == null || res.isEmpty) {
+      return <Map<String, dynamic>>[];
+    }
+    return res
+        .map((Object? e) => jsonDecode(e as String) as Map<String, dynamic>)
+        .toList();
+  }
+
+  /// Clear all stored info obout shown notifications.
+  Future<bool> clearShownNotificationsInfo() async {
+    final bool? res =
+        await _channel.invokeMethod<bool?>('clearShownNotificationsInfo');
+
+    return res ?? false;
+  }
+
   AndroidNotificationSound? _getNotificationChannelSound(
       Map<dynamic, dynamic> channelMap) {
     final int? soundSourceIndex = channelMap['soundSource'];
@@ -531,7 +553,7 @@ class AndroidFlutterLocalNotificationsPlugin
   Future<void> _handleMethod(MethodCall call) async {
     switch (call.method) {
       case 'didReceiveNotificationResponse':
-        _ondidReceiveNotificationResponse?.call(
+        _onDidReceiveNotificationResponse?.call(
           NotificationResponse(
             id: call.arguments['notificationId'],
             actionId: call.arguments['actionId'],
@@ -637,7 +659,7 @@ class IOSFlutterLocalNotificationsPlugin
           );
         },
       );
-      
+
   /// Sets badge number.
   Future<void> setBadgeNumber(int value) =>
       _channel.invokeMethod<bool>('setBadgeNumber', <String, int>{

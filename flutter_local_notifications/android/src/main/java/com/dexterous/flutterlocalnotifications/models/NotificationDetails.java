@@ -131,6 +131,7 @@ public class NotificationDetails implements Serializable {
   private static final String CUSTOM_LAYOUT_COLLAPSED_NAME = "customLayoutCollapsedName";
   private static final String CUSTOM_LAYOUT_EXPANDED_NAME = "customLayoutExpandedName";
   private static final String INEXACT_WINDOW_LENGTH_MILLIS = "inexactWindowLengthMillis";
+  private static final String SHOWN_NOTIFICATION_INFO = "shownNotificationsInfo";
 
   public Integer id;
   public String title;
@@ -208,6 +209,8 @@ public class NotificationDetails implements Serializable {
   public Integer iconResourceId;
   public Long inexactWindowLengthMillis;
 
+  public String shownNotificationsInfo;
+
   public static NotificationDetails from(Map<String, Object> arguments) {
     NotificationDetails notificationDetails = new NotificationDetails();
     notificationDetails.payload = (String) arguments.get(PAYLOAD);
@@ -242,13 +245,6 @@ public class NotificationDetails implements Serializable {
     }
     if (arguments.containsKey(DAY)) {
       notificationDetails.day = (Integer) arguments.get(DAY);
-    }
-
-    if (arguments.containsKey(INEXACT_WINDOW_LENGTH_MILLIS)) {
-      notificationDetails.inexactWindowLengthMillis =
-          (Long) arguments.get(INEXACT_WINDOW_LENGTH_MILLIS);
-    } else {
-      notificationDetails.inexactWindowLengthMillis = 0L;
     }
 
     readPlatformSpecifics(arguments, notificationDetails);
@@ -325,6 +321,20 @@ public class NotificationDetails implements Serializable {
           }
         }
       }
+
+      if (platformChannelSpecifics.containsKey(INEXACT_WINDOW_LENGTH_MILLIS)) {
+        notificationDetails.inexactWindowLengthMillis =
+                (Long) platformChannelSpecifics.get(INEXACT_WINDOW_LENGTH_MILLIS);
+      } else {
+        notificationDetails.inexactWindowLengthMillis = 0L;
+      }
+
+      if(platformChannelSpecifics.containsKey(SHOWN_NOTIFICATION_INFO)){
+        notificationDetails.shownNotificationsInfo = (String) platformChannelSpecifics.get(SHOWN_NOTIFICATION_INFO);
+      } else {
+        notificationDetails.shownNotificationsInfo = "";
+      }
+
     }
   }
 
