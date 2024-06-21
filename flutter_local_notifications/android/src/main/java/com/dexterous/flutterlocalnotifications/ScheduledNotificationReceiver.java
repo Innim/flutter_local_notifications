@@ -97,7 +97,7 @@ public class ScheduledNotificationReceiver extends BroadcastReceiver {
       }
 
       final String info = notificationDetails.shownNotificationsInfo;
-      if(!StringUtils.isNullOrEmpty(info)) {
+      if (!StringUtils.isNullOrEmpty(info)) {
         preferences.saveShownNotificationInfo(info);
       }
 

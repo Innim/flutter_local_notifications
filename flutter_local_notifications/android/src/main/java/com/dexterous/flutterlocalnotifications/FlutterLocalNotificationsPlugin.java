@@ -1660,13 +1660,15 @@ public class FlutterLocalNotificationsPlugin
   }
 
   private void getShownNotificationsInfo(Result result) {
-    final ShownNotificationsPreferences prefs = new ShownNotificationsPreferences(applicationContext);
+    final ShownNotificationsPreferences prefs =
+        new ShownNotificationsPreferences(applicationContext);
     final ArrayList<String> res = prefs.getShownNotificationsInfo();
     result.success(res);
   }
 
   private void clearShownNotificationsInfo(Result result) {
-    final ShownNotificationsPreferences prefs = new ShownNotificationsPreferences(applicationContext);
+    final ShownNotificationsPreferences prefs =
+        new ShownNotificationsPreferences(applicationContext);
     prefs.clearShownNotificationsInfo();
     result.success(true);
   }

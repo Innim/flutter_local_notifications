@@ -324,17 +324,17 @@ public class NotificationDetails implements Serializable {
 
       if (platformChannelSpecifics.containsKey(INEXACT_WINDOW_LENGTH_MILLIS)) {
         notificationDetails.inexactWindowLengthMillis =
-                (Long) platformChannelSpecifics.get(INEXACT_WINDOW_LENGTH_MILLIS);
+            (Long) platformChannelSpecifics.get(INEXACT_WINDOW_LENGTH_MILLIS);
       } else {
         notificationDetails.inexactWindowLengthMillis = 0L;
       }
 
-      if(platformChannelSpecifics.containsKey(SHOWN_NOTIFICATION_INFO)){
-        notificationDetails.shownNotificationsInfo = (String) platformChannelSpecifics.get(SHOWN_NOTIFICATION_INFO);
+      if (platformChannelSpecifics.containsKey(SHOWN_NOTIFICATION_INFO)) {
+        notificationDetails.shownNotificationsInfo =
+            (String) platformChannelSpecifics.get(SHOWN_NOTIFICATION_INFO);
       } else {
         notificationDetails.shownNotificationsInfo = "";
       }
-
     }
   }
 
