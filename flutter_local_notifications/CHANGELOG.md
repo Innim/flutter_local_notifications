@@ -1,3 +1,12 @@
+# [17.0.3]
+
+*  [Android] Added `shownNotificationsInfo` param to `NotificationDetails`. If you pass this param 
+it will save in local store if notification show.
+ * You can load this stored information by `FlutterLocalNotificationsPlugin.getShownNotificationsInfo()`
+   method and clear stored info by `FlutterLocalNotificationsPlugin.cleanShownNotificationsInfo()` method.
+
+* [Android] Fixed: `inexactWindowLengthMillis` always null in `NotificationDetails`.
+
 # [17.0.2]
 
 * [Android] Remove old corrupted notifications.

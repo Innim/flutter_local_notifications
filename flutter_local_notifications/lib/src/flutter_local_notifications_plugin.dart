@@ -264,6 +264,42 @@ class FlutterLocalNotificationsPlugin {
     }
   }
 
+  /// Returns info that stored when notifications was shown.
+  /// See [AndroidNotificationDetails.shownNotificationsInfo]
+  Future<List<Map<String, dynamic>>> getShownNotificationsInfo() async {
+    if (defaultTargetPlatform != TargetPlatform.android) {
+      assert(
+        false,
+        'The method getShownNotificationsInfo available only for android.',
+      );
+      return const <Map<String, dynamic>>[];
+    }
+
+    final List<Map<String, dynamic>> res =
+        (await resolvePlatformSpecificImplementation<
+                    AndroidFlutterLocalNotificationsPlugin>()
+                ?.getShownNotificationsInfo()) ??
+            const <Map<String, dynamic>>[];
+    return res;
+  }
+
+  /// Clear all stored info obout shown notifications.
+  Future<bool> clearShownNotificationsInfo() async {
+    if (defaultTargetPlatform != TargetPlatform.android) {
+      assert(
+        false,
+        'The method clearShownNotificationsInfo available only for android.',
+      );
+      return false;
+    }
+
+    final bool res = (await resolvePlatformSpecificImplementation<
+                AndroidFlutterLocalNotificationsPlugin>()
+            ?.clearShownNotificationsInfo()) ??
+        false;
+    return res;
+  }
+
   /// Cancel/remove the notification with the specified id.
   ///
   /// This applies to notifications that have been scheduled and those that

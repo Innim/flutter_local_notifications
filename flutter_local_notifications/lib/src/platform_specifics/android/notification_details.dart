@@ -162,6 +162,7 @@ class AndroidNotificationDetails {
     this.customLayoutCollapsedName,
     this.customLayoutExpandedName,
     this.inexactWindowLengthMillis,
+    this.shownNotificationsInfo,
   }) : customLayoutLegacyName = customLayoutLegacyName ?? customLayoutName;
 
   /// The icon that should be used when displaying the notification.
@@ -458,4 +459,9 @@ class AndroidNotificationDetails {
   /// zero, inexact alarm will plan in this length, should be 10 minutes
   /// or more, see more in docs https://developer.android.com/about/versions/14/changes/schedule-exact-alarms#use-cases
   final int? inexactWindowLengthMillis;
+
+  /// Some info that will save in local store if notification show, to get
+  /// it from store use
+  /// [AndroidFlutterLocalNotificationsPlugin.getShownNotificationsInfo()].
+  final String? shownNotificationsInfo;
 }

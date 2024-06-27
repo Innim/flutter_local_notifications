@@ -24,12 +24,12 @@ import java.time.format.DateTimeFormatter;
 /** Created by michaelbui on 24/3/18. */
 @Keep
 public class ScheduledNotificationReceiver extends BroadcastReceiver {
-
   private static final String TAG = "ScheduledNotifReceiver";
 
   @Override
   @SuppressWarnings("deprecation")
   public void onReceive(final Context context, Intent intent) {
+
     String notificationDetailsJson =
         intent.getStringExtra(FlutterLocalNotificationsPlugin.NOTIFICATION_DETAILS);
     if (StringUtils.isNullOrEmpty(notificationDetailsJson)) {
@@ -91,6 +91,13 @@ public class ScheduledNotificationReceiver extends BroadcastReceiver {
           fault("Exception while showing notification.", e, intent);
         }
         return;
+      }
+
+      final String info = notificationDetails.shownNotificationsInfo;
+      if (!StringUtils.isNullOrEmpty(info)) {
+        final ShownNotificationsPreferences preferences =
+            new ShownNotificationsPreferences(context);
+        preferences.saveShownNotificationInfo(info);
       }
 
       try {

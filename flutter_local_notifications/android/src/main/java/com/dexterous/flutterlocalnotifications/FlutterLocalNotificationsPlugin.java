@@ -152,6 +152,8 @@ public class FlutterLocalNotificationsPlugin
   private static final String GET_NOTIFICATION_CHANNELS_METHOD = "getNotificationChannels";
   private static final String START_FOREGROUND_SERVICE = "startForegroundService";
   private static final String STOP_FOREGROUND_SERVICE = "stopForegroundService";
+  private static final String GET_SHOWN_NOTIFICATIONS_INFO = "getShownNotificationsInfo";
+  private static final String CLEAR_SHOWN_NOTIFICATIONS_INFO = "clearShownNotificationsInfo";
   private static final String PENDING_NOTIFICATION_REQUESTS_METHOD = "pendingNotificationRequests";
   private static final String GET_ACTIVE_NOTIFICATIONS_METHOD = "getActiveNotifications";
   private static final String SHOW_METHOD = "show";
@@ -1645,10 +1647,30 @@ public class FlutterLocalNotificationsPlugin
       case STOP_FOREGROUND_SERVICE:
         stopForegroundService(result);
         break;
+      case GET_SHOWN_NOTIFICATIONS_INFO:
+        getShownNotificationsInfo(result);
+        break;
+      case CLEAR_SHOWN_NOTIFICATIONS_INFO:
+        clearShownNotificationsInfo(result);
+        break;
       default:
         result.notImplemented();
         break;
     }
+  }
+
+  private void getShownNotificationsInfo(Result result) {
+    final ShownNotificationsPreferences prefs =
+        new ShownNotificationsPreferences(applicationContext);
+    final ArrayList<String> res = prefs.getShownNotificationsInfo();
+    result.success(res);
+  }
+
+  private void clearShownNotificationsInfo(Result result) {
+    final ShownNotificationsPreferences prefs =
+        new ShownNotificationsPreferences(applicationContext);
+    prefs.clearShownNotificationsInfo();
+    result.success(true);
   }
 
   private void pendingNotificationRequests(Result result) {
