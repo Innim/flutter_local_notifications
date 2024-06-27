@@ -17,6 +17,10 @@ This is fork of [flutter_local_notifications](https://github.com/MaikuB/flutter_
 * Ability to set your own custom layout for notifications.
 * More detailed exceptions in `ScheduledNotificationReceiver.onReceive()`.
 * Ability to set notification window for inexact alarm. See `AndroidNotificationDetails.inexactWindowLengthMillis`
+* Ability to store info about shown notifications. See `AndroidNotificationDetails.shownNotificationsInfo`. If you pass this param
+  it will save in local store if notification show.
+ * You can load this stored information by `FlutterLocalNotificationsPlugin.getShownNotificationsInfo()`
+   method and clear stored info by `FlutterLocalNotificationsPlugin.cleanShownNotificationsInfo()` method.
 
 ### iOS
 
