@@ -1,3 +1,8 @@
+# [17.1.0]
+
+* [Android] Upgrade `androidx.core:core` to 1.5.0 for supporting `setSilent()` in notification builder.
+* [Android] Fixed: NullPointerException when trying to call `intValue()` while parsing `notificationDetails`.
+
 # [17.0.3]
 
 *  [Android] Added `shownNotificationsInfo` param to `NotificationDetails`. If you pass this param 
