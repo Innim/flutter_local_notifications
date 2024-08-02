@@ -265,6 +265,7 @@ public class NotificationDetails implements Serializable {
       readStyleInformation(notificationDetails, platformChannelSpecifics);
       notificationDetails.icon = (String) platformChannelSpecifics.get(ICON);
       notificationDetails.priority = (Integer) platformChannelSpecifics.get(PRIORITY);
+      notificationDetails.importance = (Integer) platformChannelSpecifics.get(IMPORTANCE);
       readSoundInformation(notificationDetails, platformChannelSpecifics);
       notificationDetails.enableVibration =
           (Boolean) platformChannelSpecifics.get(ENABLE_VIBRATION);
