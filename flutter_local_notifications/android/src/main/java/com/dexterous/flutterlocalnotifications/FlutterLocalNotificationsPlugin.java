@@ -561,16 +561,8 @@ public class FlutterLocalNotificationsPlugin
           if (action.titleColor != null) {
             contentView.setTextColor(viewId, action.titleColor);
           }
-          if (fontScale > 1.0f) {
-            int dimenId = resources.getIdentifier(
-                action.customViewId + "_text_size", "dimen", packageName);
-            if (dimenId != 0) {
-              float baseSizePx = resources.getDimension(dimenId);
-              float compensatedSizePx = baseSizePx / fontScale;
-              contentView.setTextViewTextSize(
-                  viewId, TypedValue.COMPLEX_UNIT_PX, compensatedSizePx);
-            }
-          }
+          compensateTextSizeForFontScale(
+              contentView, resources, viewId, action.customViewId, packageName, fontScale);
           contentView.setOnClickPendingIntent(viewId, actionIntents.get(action.id));
         }
       }
@@ -583,16 +575,22 @@ public class FlutterLocalNotificationsPlugin
     int id = resources.getIdentifier(name, "id", packageName);
     if (!StringUtils.isNullOrEmpty(value)) {
       contentView.setTextViewText(id, value);
-      if (fontScale > 1.0f) {
-        int dimenId = resources.getIdentifier(name + "_text_size", "dimen", packageName);
-        if (dimenId != 0) {
-          float baseSizePx = resources.getDimension(dimenId);
-          float compensatedSizePx = baseSizePx / fontScale;
-          contentView.setTextViewTextSize(id, TypedValue.COMPLEX_UNIT_PX, compensatedSizePx);
-        }
-      }
+      compensateTextSizeForFontScale(contentView, resources, id, name, packageName, fontScale);
     } else {
       contentView.setViewVisibility(id, View.GONE);
+    }
+  }
+
+  private static void compensateTextSizeForFontScale(
+      RemoteViews contentView, Resources resources, int viewId, String viewName,
+      String packageName, float fontScale) {
+    if (fontScale > 1.0f) {
+      int dimenId = resources.getIdentifier(viewName + "_text_size", "dimen", packageName);
+      if (dimenId != 0) {
+        float baseSizePx = resources.getDimension(dimenId);
+        float compensatedSizePx = baseSizePx / fontScale;
+        contentView.setTextViewTextSize(viewId, TypedValue.COMPLEX_UNIT_PX, compensatedSizePx);
+      }
     }
   }
 
