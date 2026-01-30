@@ -21,6 +21,7 @@ This is fork of [flutter_local_notifications](https://github.com/MaikuB/flutter_
   it will save in local store if notification show.
  * You can load this stored information by `FlutterLocalNotificationsPlugin.getShownNotificationsInfo()`
    method and clear stored info by `FlutterLocalNotificationsPlugin.cleanShownNotificationsInfo()` method.
+* Font scale compensation for custom notification layouts. See [Font scale compensation for custom layouts](#font-scale-compensation-for-custom-layouts).
 
 ### iOS
 
@@ -51,6 +52,7 @@ This is fork of [flutter_local_notifications](https://github.com/MaikuB/flutter_
    - [Scheduled notifications](#scheduling-a-notification)
    - [Fullscreen intent notifications](#full-screen-intent-notifications)
    - [Release build configuration](#release-build-configuration)
+   - [Font scale compensation for custom layouts](#font-scale-compensation-for-custom-layouts)
 - **[🔧 iOS setup](#-ios-setup)**
    - [General setup](#general-setup)
    - [Handling notifications whilst the app is in the foreground](#handling-notifications-whilst-the-app-is-in-the-foreground)
@@ -329,6 +331,38 @@ Developers should also be across Google's requirements on using full-screen inte
 Before creating the release build of your app (which is the default setting when building an APK or app bundle) you will need to customise your ProGuard configuration file as per this [link](https://developer.android.com/studio/build/shrink-code#keep-code). Rules specific to the GSON dependency being used by the plugin will need to be added. These rules can be found [here](https://github.com/google/gson/blob/master/examples/android-proguard-example/proguard.cfg). Whilst the example app has a Proguard rules (`proguard-rules.pro`) [here](https://github.com/MaikuB/flutter_local_notifications/blob/master/flutter_local_notifications/example/android/app/proguard-rules.pro), it is recommended that developers refer to the rules on the GSON repository in case they get updated over time.
 
 ⚠️ Ensure that you have configured the resources that should be kept so that resources like your notification icons aren't discarded by the R8 compiler by following the instructions [here](https://developer.android.com/studio/build/shrink-code#keep-resources). If you have chosen to use `@mipmap/ic_launcher` as the notification icon (against the official Android guidance), be sure to include this in the `keep.xml` file. If you fail to do this, notifications might be broken. In the worst case they will never show, instead silently failing when the system looks for a resource that has been removed. If they do still show, you might not see the icon you specified. The configuration used by the example app can be found [here](https://github.com/MaikuB/flutter_local_notifications/blob/master/flutter_local_notifications/example/android/app/src/main/res/raw/keep.xml) where it is specifying that all drawable resources should be kept, as well as the file used to play a custom notification sound (sound file is located [here](https://github.com/MaikuB/flutter_local_notifications/blob/master/flutter_local_notifications/example/android/app/src/main/res/raw/slow_spring_board.mp3)).
+
+### Font scale compensation for custom layouts
+
+When users increase the system font size (Settings → Display → Font size), text in custom `RemoteViews`-based notification layouts can overflow. This happens because Android scales all `sp` values globally before rendering `RemoteViews`, and `autoSizeTextType` is not supported in `RemoteViews`.
+
+The plugin detects `fontScale > 1.0` at notification creation time and programmatically overrides text sizes via `RemoteViews.setTextViewTextSize()` with compensated pixel values. At `fontScale == 1.0` (default) no overrides are applied.
+
+#### Setup
+
+Define dimen resources in `android/app/src/main/res/values/dimens.xml` whose values match the `textSize` in your layout XML. The naming convention is **`{view_id}_text_size`**, where `{view_id}` is the `android:id` of the view.
+
+For a layout with:
+
+```xml
+<TextView android:id="@+id/push_title" android:textSize="14sp" ... />
+<TextView android:id="@+id/push_text"  android:textSize="12sp" ... />
+<Button   android:id="@+id/action_enter" android:textSize="15sp" ... />
+<Button   android:id="@+id/action_skip"  android:textSize="15sp" ... />
+```
+
+Add dimens:
+
+```xml
+<resources>
+    <dimen name="push_title_text_size">14sp</dimen>
+    <dimen name="push_text_text_size">12sp</dimen>
+    <dimen name="action_enter_text_size">15sp</dimen>
+    <dimen name="action_skip_text_size">15sp</dimen>
+</resources>
+```
+
+No changes to Dart code or layout XML are required. If a dimen resource for a given view ID is not found, no override is applied — the feature is fully backwards-compatible.
 
 ## 🔧 iOS setup
 

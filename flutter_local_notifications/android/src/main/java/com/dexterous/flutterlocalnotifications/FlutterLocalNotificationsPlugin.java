@@ -34,6 +34,7 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.RemoteViews;
 import android.util.Log;
@@ -426,6 +427,8 @@ public class FlutterLocalNotificationsPlugin
           Resources resources = null;
           resources = manager.getResourcesForApplication(packageName);
 
+          float fontScale = context.getResources().getConfiguration().fontScale;
+
           if (VERSION.SDK_INT < VERSION_CODES.S) {
             RemoteViews contentView =
                 setCustomContentView(
@@ -433,10 +436,12 @@ public class FlutterLocalNotificationsPlugin
                     resources,
                     notificationDetails,
                     notificationDetails.customLayoutLegacyName,
-                    packageName);
+                    packageName,
+                    fontScale);
             if (notificationDetails.actions != null) {
               setCustomContentViewActions(
-                  contentView, resources, packageName, actionIntents, notificationDetails.actions);
+                  contentView, resources, packageName, actionIntents, notificationDetails.actions,
+                  fontScale);
             }
             builder.setCustomContentView(contentView);
           } else {
@@ -448,7 +453,8 @@ public class FlutterLocalNotificationsPlugin
                       resources,
                       notificationDetails,
                       customLayoutCollapsedName,
-                      packageName);
+                      packageName,
+                      fontScale);
               builder.setCustomContentView(contentView);
             }
 
@@ -460,14 +466,16 @@ public class FlutterLocalNotificationsPlugin
                       resources,
                       notificationDetails,
                       customLayoutExpandedName,
-                      packageName);
+                      packageName,
+                      fontScale);
               if (notificationDetails.actions != null) {
                 setCustomContentViewActions(
                     contentView,
                     resources,
                     packageName,
                     actionIntents,
-                    notificationDetails.actions);
+                    notificationDetails.actions,
+                    fontScale);
               }
               builder.setCustomBigContentView(contentView);
             }
@@ -519,13 +527,14 @@ public class FlutterLocalNotificationsPlugin
       Resources resources,
       NotificationDetails notificationDetails,
       String layoutName,
-      String packageName) {
+      String packageName,
+      float fontScale) {
     int layoutId = resources.getIdentifier(layoutName, "layout", packageName);
     RemoteViews contentView = new RemoteViews(packageName, layoutId);
     setCustomContentViewField(
-        contentView, resources, notificationDetails.title, "push_title", packageName);
+        contentView, resources, notificationDetails.title, "push_title", packageName, fontScale);
     setCustomContentViewField(
-        contentView, resources, notificationDetails.body, "push_text", packageName);
+        contentView, resources, notificationDetails.body, "push_text", packageName, fontScale);
     setCustomContentViewImage(
         context,
         contentView,
@@ -542,7 +551,8 @@ public class FlutterLocalNotificationsPlugin
       Resources resources,
       String packageName,
       Map<String, PendingIntent> actionIntents,
-      List<NotificationAction> actions) {
+      List<NotificationAction> actions,
+      float fontScale) {
     for (NotificationAction action : actions) {
       if (!StringUtils.isNullOrEmpty(action.customViewId)) {
         int viewId = resources.getIdentifier(action.customViewId, "id", packageName);
@@ -551,6 +561,16 @@ public class FlutterLocalNotificationsPlugin
           if (action.titleColor != null) {
             contentView.setTextColor(viewId, action.titleColor);
           }
+          if (fontScale > 1.0f) {
+            int dimenId = resources.getIdentifier(
+                action.customViewId + "_text_size", "dimen", packageName);
+            if (dimenId != 0) {
+              float baseSizePx = resources.getDimension(dimenId);
+              float compensatedSizePx = baseSizePx / fontScale;
+              contentView.setTextViewTextSize(
+                  viewId, TypedValue.COMPLEX_UNIT_PX, compensatedSizePx);
+            }
+          }
           contentView.setOnClickPendingIntent(viewId, actionIntents.get(action.id));
         }
       }
@@ -558,10 +578,19 @@ public class FlutterLocalNotificationsPlugin
   }
 
   private static void setCustomContentViewField(
-      RemoteViews contentView, Resources resources, String value, String name, String packageName) {
+      RemoteViews contentView, Resources resources, String value, String name, String packageName,
+      float fontScale) {
     int id = resources.getIdentifier(name, "id", packageName);
     if (!StringUtils.isNullOrEmpty(value)) {
       contentView.setTextViewText(id, value);
+      if (fontScale > 1.0f) {
+        int dimenId = resources.getIdentifier(name + "_text_size", "dimen", packageName);
+        if (dimenId != 0) {
+          float baseSizePx = resources.getDimension(dimenId);
+          float compensatedSizePx = baseSizePx / fontScale;
+          contentView.setTextViewTextSize(id, TypedValue.COMPLEX_UNIT_PX, compensatedSizePx);
+        }
+      }
     } else {
       contentView.setViewVisibility(id, View.GONE);
     }

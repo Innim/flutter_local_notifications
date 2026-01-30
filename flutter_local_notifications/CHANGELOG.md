@@ -1,3 +1,87 @@
+# 17.2.6
+
+## [17.2.6]
+
+* [Android] Added font scale compensation for custom notification layouts.
+
+When the user increases the system font size (Settings → Display → Font size), text in custom
+`RemoteViews`-based notification layouts can overflow because Android scales `sp` values before
+rendering and `autoSizeTextType` is not supported in `RemoteViews`.
+
+The plugin now detects `fontScale > 1.0` at notification creation time and programmatically
+overrides text sizes using `RemoteViews.setTextViewTextSize()` with compensated pixel values,
+keeping text at a fixed visual size regardless of the system font scale.
+When `fontScale == 1.0` (default), no overrides are applied.
+
+### How to use
+
+**1. Define dimen resources** in `android/app/src/main/res/values/dimens.xml` that match the
+`textSize` values in your custom notification layout XML. The naming convention is
+`{view_id}_text_size`:
+
+```xml
+<resources>
+    <!-- Must match textSize in your notification layout XMLs -->
+    <dimen name="push_title_text_size">14sp</dimen>
+    <dimen name="push_text_text_size">12sp</dimen>
+
+    <!-- For action buttons (view IDs from customViewId in AndroidNotificationAction) -->
+    <dimen name="action_enter_text_size">15sp</dimen>
+    <dimen name="action_skip_text_size">15sp</dimen>
+</resources>
+```
+
+For example, if your layout has:
+
+```xml
+<TextView
+    android:id="@+id/push_title"
+    android:textSize="14sp" ... />
+
+<TextView
+    android:id="@+id/push_text"
+    android:textSize="12sp" ... />
+
+<Button
+    android:id="@+id/action_enter"
+    android:textSize="15sp" ... />
+```
+
+Then each dimen name is `push_title` + `_text_size` = `push_title_text_size`, etc.
+
+**2. No changes to Dart code or layout XML are required.** Existing code works as before:
+
+```dart
+await flutterLocalNotificationsPlugin.show(
+  id,
+  'Title',
+  'Body text',
+  NotificationDetails(
+    android: AndroidNotificationDetails(
+      'channel_id',
+      'Channel Name',
+      customLayoutExpandedName: 'scheduled_notification_expanded',
+      customLayoutCollapsedName: 'scheduled_notification_collapsed',
+      actions: <AndroidNotificationAction>[
+        AndroidNotificationAction(
+          'enter',
+          'Show',
+          customViewId: 'action_enter',
+        ),
+        AndroidNotificationAction(
+          'skip',
+          'Close',
+          customViewId: 'action_skip',
+        ),
+      ],
+    ),
+  ),
+);
+```
+
+**Note:** If a dimen resource for a given view ID is not found, no override is applied for that
+view. This makes the feature fully backwards-compatible.
+
 # 17.2.5
 
 Include changes from parent repo v17.0.1 - 17.2.4
